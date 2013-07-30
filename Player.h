@@ -1,3 +1,7 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
+
 class Player
 {
 public:
@@ -7,11 +11,13 @@ public:
 
 	int xVel, yVel;
 	int xPos, yPos;
+	int WorldxPos, WorldyPos;
 
 	void HandleEvents();
 	void UpdatePosition();
-	void Render();
 	void Fire();
 
 	Player();
-} Character;
+};
+
+#endif

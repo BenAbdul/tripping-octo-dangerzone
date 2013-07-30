@@ -8,38 +8,39 @@ Player::Player()
 	CurrentSelection = 1; //Melee
 	xVel = 0;
 	yVel = 0;
-	xPos = 400;
-	yPos = 250;
+	WorldxPos = 100;
+	WorldyPos = 100;
+	xPos = (ScreenWidth - Character1->w)/2;
+	yPos = (ScreenHeight - Character1->h)/2;
 }
 
 void Player::HandleEvents()
 {
-	if (ArrowStates[SDLK_LEFT])
+	if (LDown == true)
 	{
-		if (xVel - 5 < -20) xVel = -20;
-		else xVel -=5;
+		if (xVel - 1 < -20) xVel = -10;
+		else xVel -=1;
 	}
 
-	if (ArrowStates[SDLK_RIGHT])
+	if (RDown == true)
 	{
-		if (xVel + 5 > 20) xVel = 20;
-		else xVel += 5;
+		if (xVel + 1 > 20) xVel = 10;
+		else xVel += 1;
 	}
 
-	if (ArrowStates[SDLK_UP])
+	if (UDown == true)
 	{
-		if (yVel - 5 < -20) yVel = -20;
-		else yVel -= 5;
+		if (yVel - 1 < -20) yVel = -10;
+		else yVel -= 1;
 	}
 
-	if (ArrowStates[SDLK_DOWN])
+	if (DDown == true)
 	{
-		if (yVel + 5 > 20) yVel = 20;
-		else yVel += 5;
+		if (yVel + 1 > 20) yVel = 10;
+		else yVel += 1;
 	}
 
-	if (ArrowStates[SDLK_UP] == false && ArrowStates[SDLK_DOWN] == false 
-		&& ArrowStates[SDLK_LEFT] == false && ArrowStates[SDLK_RIGHT] == false)
+	if (UDown == false && DDown == false &&  LDown == false && RDown == false)
 	{
 		if (yVel != 0)
 		{
@@ -73,18 +74,64 @@ void Player::HandleEvents()
 	}
 }
 
-void Player::Render()
-{
-	ApplySurface(xPos, yPos, Character, Screen);
-}
-
 void Player::UpdatePosition()
 {
-	xPos += xVel;
-	yPos += yVel;
+	WorldxPos += xVel;
+	WorldyPos += yVel;
+	xPos = (ScreenWidth - Character1->w)/2;
+	yPos = (ScreenHeight - Character1->h)/2;
+
+	if (WorldxPos < 500)
+	{
+		WorldxPos = 500;
+		xVel = 0;
+	}
+
+	
+	if (WorldxPos + Character1->w > 1500)
+	{
+		WorldxPos = 1500 - Character1->w;
+		xVel = 0;
+	}
+	
+
+	if (WorldyPos < 500)
+	{
+		WorldyPos = 500;
+		yVel = 0;
+	}
+
+	
+	if (WorldyPos + Character1->h > 1500)
+	{
+		WorldyPos = 1500 - Character1->h;
+		yVel = 0;
+	}
+	
+	/*
+	if (xPos < 100)
+	{
+		xPos = 100;
+	}
+
+	if (xPos + Character1->w > 700)
+	{
+		xPos = (700 - Character1->w);
+	}
+
+	if (yPos < 100) 
+	{
+		yPos = 100;
+	}
+
+	if (yPos + Character1->h > 400)
+	{
+		yPos = 400 - (Character1->h);
+	}
+	*/
 }
 
 void Player::Fire()
 {
-	//nigga I aint no magician
+	//I aint no magician
 }
