@@ -4,6 +4,7 @@
 #include"Game.h"
 #include"Camera.h"
 #include"Cursor.h"
+#include"CalculateProjectileAngle.h"
 #include<sstream>
 
 void Game()
@@ -24,26 +25,26 @@ void Game()
 
 		if(Mouse.MouseX > 700) 
 		{
-			Viewport.CameraRect.x += (Mouse.MouseX - 700);
-			Character.xPos -= (Mouse.MouseX - 700);
+			Viewport.CameraRect.x += (Mouse.MouseX - 700) *1.2;
+			Character.xPos -= (Mouse.MouseX - 700)*1.2;
 		}
 
 		if(Mouse.MouseX < 100) 
 		{
-			Viewport.CameraRect.x -= (100 - Mouse.MouseX);
-			Character.xPos += (100 - Mouse.MouseX);
+			Viewport.CameraRect.x -= (100 - Mouse.MouseX)* 1.2;
+			Character.xPos += (100 - Mouse.MouseX)* 1.2;
 		}
 
 		if(Mouse.MouseY > 400) 
 		{
-			Viewport.CameraRect.y += (Mouse.MouseY - 400);
-			Character.yPos -= (Mouse.MouseY - 400);
+			Viewport.CameraRect.y += (Mouse.MouseY - 400)* 1.2;
+			Character.yPos -= (Mouse.MouseY - 400)* 1.2;
 		}
 
 		if(Mouse.MouseY < 100) 
 		{
-			Viewport.CameraRect.y -= (100 - Mouse.MouseY);
-			Character.yPos += (100 - Mouse.MouseY);
+			Viewport.CameraRect.y -= (100 - Mouse.MouseY)* 1.5;
+			Character.yPos += (100 - Mouse.MouseY) * 1.5;
 		}
 
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
@@ -69,12 +70,16 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
+			DebugStream << "Current Angle " << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
+			ApplySurface(0,100,Message2,Screen);
+			DebugStream.str("");
 			if(LDown == true) DebugStream << " Left ";
 			if(RDown == true) DebugStream << " Right";
 			if(UDown == true) DebugStream << " Up ";
 			if(DDown == true) DebugStream << " Down ";
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
-			ApplySurface(0,100,Message2,Screen);
+			ApplySurface(0,125,Message2,Screen);
 		}
 		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character1->w)/2 , Character.WorldyPos - (ScreenHeight - Character1->h)/2);
 		SDL_Flip(Screen);
