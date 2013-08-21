@@ -1,4 +1,5 @@
 #include"Declarations.h"
+#include "OpenDebugWindow.h"
 
 bool Init()
 {
@@ -42,6 +43,8 @@ bool RDown = false;
 bool UDown = false;
 bool DDown = false;
 
+std::stringstream SpareStream;
+
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
 const int ScreenBBP = 32;
@@ -76,32 +79,40 @@ void LoadFiles()
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
 	KarmaFuture = TTF_OpenFont("Resources/Fonts/KarmaFuture.ttf",34);
 	EightBitLimitSmall = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",16);
-	char *Asshole = TTF_GetError();
 }
 
 bool SetClips()
 {
-	for(int x = 0; x <= 16; x++)
+	SpareStream.str("");
+	SpareStream << "CursorSheets width is " << CursorSheet->w;
+	OpenDebugWindow(SpareStream.str());
+	for(int x = 0; x < 16; x++)
 	{
 		CursorClips[x].x = (x * 38);
 		CursorClips[x].y = 0;
 		CursorClips[x].w = 38;
 		CursorClips[x].h = 38;
+		if (x == 15) CursorClips[x].w = 34;
+		SpareStream.str("");
+		SpareStream << "Cursor frame " << x << " begins at x = " << CursorClips[x].x << " and ends at " << CursorClips[x].x + CursorClips[x].w;
+		OpenDebugWindow(SpareStream.str());
 	}
 	if (CursorClips[2].w == 0) return false;
+	return true;
 }
 
 bool CheckFiles()
 {
 	WasItInit = TTF_WasInit();
 	if (Background == NULL) return false;
-	if (Character1 == NULL) return false;
-	if (MenuBackground == NULL) return false;
-	if (EightBitLimit == NULL) return false;
-	if (CursorSheet == NULL) return false;
-	if (KarmaFuture == NULL) return false;
-	if (EightBitLimitSmall == NULL) return false;
-	if (PausedScreen == NULL) return false;
+	else if (Character1 == NULL) return false;
+	else if (MenuBackground == NULL) return false;
+	else if (EightBitLimit == NULL) return false;
+	else if (CursorSheet == NULL) return false;
+	else if (KarmaFuture == NULL) return false;
+	else if (EightBitLimitSmall == NULL) return false;
+	else if (PausedScreen == NULL) return false;
+	OpenDebugWindow("All files loaded successfully");
 	return true;
 }
 

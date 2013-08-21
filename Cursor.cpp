@@ -19,7 +19,7 @@ void Cursor::Render()
 		Frame++;
 		FrameTime = 0;
 	}
-	if (Frame == 17) Frame = 0;
+	if (Frame == 15) Frame = 0;
 	SDL_GetMouseState(&MouseX,&MouseY);
 	ApplySurface(MouseX - 19, MouseY - 19, CursorSheet ,Screen , &CursorClips[Frame]);
 }

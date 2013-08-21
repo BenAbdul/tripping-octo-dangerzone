@@ -1,7 +1,5 @@
 #ifndef CURSOR_H
 #define CURSOR_H
-#include "SDL.h"
-#include "Declarations.h"
 
 class Cursor
 {

@@ -3,6 +3,6 @@
 
 //Returns whatever the angle the bearing of the mouse is from the player
 
-int CalculateProjectileAngle(double PlayerX, double PlayerY, double MouseX, double MouseY);
+double CalculateProjectileAngle(double PlayerX, double PlayerY, double MouseX, double MouseY);
 
 #endif

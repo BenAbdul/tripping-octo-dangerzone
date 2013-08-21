@@ -2,13 +2,19 @@
 #define DECLARATIONS_H
 
 #include<iostream>
+#include<vector>
+#include<string>
+#include<sstream>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "SDL_mixer.h"
 #include "SDL_rotozoom.h"
+#include "OpenDebugWindow.h"
 
 extern SDL_Event event;
+
+extern std::stringstream SpareStream;
 
 extern const int ScreenWidth;
 extern const int ScreenHeight;

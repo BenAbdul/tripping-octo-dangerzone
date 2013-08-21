@@ -5,6 +5,9 @@
 #include"Camera.h"
 #include"Cursor.h"
 #include"CalculateProjectileAngle.h"
+#include"Pause.h"
+#include"OpenDebugWindow.h"
+#include<windows.h>
 #include<sstream>
 
 void Game()
@@ -50,7 +53,7 @@ void Game()
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
 		ApplySurface(Character.xPos, Character.yPos, Character1, Screen);
 		Mouse.Render();
-		if(Debug == true)
+		if(Debug = true)
 		{
 			std::stringstream DebugStream;
 			DebugStream.str("");
@@ -70,7 +73,7 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Current Angle " << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			DebugStream << "Current Angle " << Mouse.Frame; //CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,100,Message2,Screen);
 			DebugStream.str("");
@@ -100,22 +103,15 @@ void Game()
 
 				if(event.key.keysym.sym == SDLK_TAB) Debug = !Debug;
 
+				if(event.key.keysym.sym == SDLK_n && Debug == true)
+				{
+					OpenDebugWindow("End of log, ty for reading x");
+					OpenDebugWindow("Open");
+				}
+
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 				{
-					bool Resumed = false;
-					SDL_WM_GrabInput(SDL_GRAB_OFF);
-					ApplySurface(0,0,PausedScreen,Screen);
-					SDL_Flip(Screen);
-					while (Quit == false && Resumed == false)
-					{
-						SDL_Delay(500);
-						while(SDL_PollEvent(&event))
-						{
-							if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) Resumed = true;
-							if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) Quit = true;
-						}
-					}
-					SDL_WM_GrabInput(SDL_GRAB_ON);
+					Pause();
 				}
 			}
 

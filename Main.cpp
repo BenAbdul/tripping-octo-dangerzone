@@ -13,9 +13,11 @@ int main (int argc, char* argv [])
 		switch(State)
 		{
 		case MENU:
+			OpenDebugWindow("Entering Menu()");
 			Menu();
 			break;
 		case GAME:
+			OpenDebugWindow("Entering Game()");
 			Game();
 			break;
 		}
