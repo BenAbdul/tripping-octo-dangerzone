@@ -16,7 +16,8 @@ bool Init()
 
 SDL_Surface *LoadImage( std::string filename )
 {
-    SDL_Surface* LoadedImage = NULL;
+    OpenDebugWindow(filename);
+	SDL_Surface* LoadedImage = NULL;
     SDL_Surface* OptimizedImage = NULL;
         LoadedImage = IMG_Load( filename.c_str() );
     if( LoadedImage != NULL )
@@ -42,6 +43,7 @@ bool LDown = false;
 bool RDown = false;
 bool UDown = false;
 bool DDown = false;
+bool PlaySound = true;
 
 std::stringstream SpareStream;
 
@@ -53,7 +55,7 @@ SDL_Colour White = {225,225,225};
 
 Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 
-SDL_Rect CursorClips[16];
+SDL_Rect CursorClips[17];
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;

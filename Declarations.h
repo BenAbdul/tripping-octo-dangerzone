@@ -24,7 +24,7 @@ extern SDL_Colour White;
 
 extern Uint8 *ArrowStates;
 
-extern SDL_Rect CursorClips[16];
+extern SDL_Rect CursorClips[17];
 
 extern SDL_Surface *Background;
 extern SDL_Surface *Character1;
@@ -47,11 +47,10 @@ extern bool LDown;
 extern bool RDown;
 extern bool UDown;
 extern bool DDown;
+extern bool PlaySound;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;
-
-extern char* Asshole;
 
 SDL_Surface *LoadImage( std::string filename );
 bool Init();

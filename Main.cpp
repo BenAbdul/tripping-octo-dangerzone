@@ -5,6 +5,7 @@
 int main (int argc, char* argv [])
 {
 	if (Init() == false) return -1;
+	OpenDebugWindow("Loading files");
 	LoadFiles();
 	if (CheckFiles() == false) return -1;
 	if (SetClips() == false) return -1;

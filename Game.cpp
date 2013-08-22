@@ -4,6 +4,7 @@
 #include"Game.h"
 #include"Camera.h"
 #include"Cursor.h"
+#include"PlayRandomMusic.h"
 #include"CalculateProjectileAngle.h"
 #include"Pause.h"
 #include"OpenDebugWindow.h"
@@ -14,12 +15,16 @@ void Game()
 {
 	SDL_WM_GrabInput( SDL_GRAB_ON );
 	SDL_ShowCursor(SDL_DISABLE);
+	Cursor Mouse;
+	SpareStream.str("");
+	SpareStream << "At the time of declaration, Mouse.FrameTime is " << Mouse.FrameTime;
+	OpenDebugWindow(SpareStream.str());
 	Timer FPS;
 	Player Character;
 	Camera Viewport;
-	Cursor Mouse;
 	bool Debug = false;
 	int Temp;
+	PlayRandomMusic();
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();		
@@ -73,7 +78,7 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Current Angle " << Mouse.Frame; //CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			DebugStream << "Current Angle " << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,100,Message2,Screen);
 			DebugStream.str("");
@@ -105,8 +110,8 @@ void Game()
 
 				if(event.key.keysym.sym == SDLK_n && Debug == true)
 				{
-					OpenDebugWindow("End of log, ty for reading x");
 					OpenDebugWindow("Open");
+					Pause();
 				}
 
 				if(event.key.keysym.sym == SDLK_ESCAPE)
@@ -121,6 +126,12 @@ void Game()
 				if(event.key.keysym.sym == SDLK_RIGHT) RDown = false;
 				if(event.key.keysym.sym == SDLK_UP) UDown = false;
 				if(event.key.keysym.sym == SDLK_DOWN) DDown = false;
+			}
+
+			if(event.type == SDL_MOUSEMOTION)
+			{
+				Mouse.MouseX = event.motion.x;
+				Mouse.MouseY = event.motion.y;
 			}
 		}
 		if (FPS.get_ticks() < 1000 / 60) SDL_Delay(1000/60 - FPS.get_ticks());
