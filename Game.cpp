@@ -6,6 +6,7 @@
 #include"Cursor.h"
 #include"PlayRandomMusic.h"
 #include"CalculateProjectileAngle.h"
+#include"ReturnPlayerDirection.h"
 #include"Pause.h"
 #include"OpenDebugWindow.h"
 #include<windows.h>
@@ -27,10 +28,25 @@ void Game()
 	PlayRandomMusic();
 	while (Quit == false && State == GAME)
 	{
-		FPS.start();		
+		FPS.start();
 		Character.HandleEvents();
 		Character.UpdatePosition();
-
+		int PlayerDirection = ReturnPlayerDirection(Mouse.MouseX,Mouse.MouseY);
+		switch(PlayerDirection)
+		{
+		case 1:
+		case 2:
+		case 3: Character.CurrentSprite = U1; break;
+		case 4: Character.CurrentSprite = L1; break;
+		case 5:
+			if (Mouse.MouseY > 250) Character.CurrentSprite = D1;
+			else Character.CurrentSprite = U1;
+			break;
+		case 6: Character.CurrentSprite = R1;break;
+		case 7:
+		case 8:
+		case 9: Character.CurrentSprite = D1; break;
+		}
 		if(Mouse.MouseX > 700) 
 		{
 			Viewport.CameraRect.x += (Mouse.MouseX - 700) *1.2;
@@ -56,7 +72,10 @@ void Game()
 		}
 
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
-		ApplySurface(Character.xPos, Character.yPos, Character1, Screen);
+		if(Character.CurrentSprite->w == 21) Shadow = RShadow;
+		else Shadow = LShadow;
+		ApplySurface(Character.xPos, Character.yPos + 20,Shadow,Screen);
+		ApplySurface(Character.xPos, Character.yPos, Character.CurrentSprite, Screen);
 		Mouse.Render();
 		if(Debug = true)
 		{
@@ -78,7 +97,7 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Current Angle " << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			DebugStream << "Press n for a juicy debug log"; //(int PlayerX, int PlayerY, int MouseX, int MouseY)
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,100,Message2,Screen);
 			DebugStream.str("");
@@ -89,7 +108,7 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,125,Message2,Screen);
 		}
-		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character1->w)/2 , Character.WorldyPos - (ScreenHeight - Character1->h)/2);
+		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character.CurrentSprite->w)/2 , Character.WorldyPos - (ScreenHeight - Character.CurrentSprite->h)/2);
 		SDL_Flip(Screen);
 		while(SDL_PollEvent(&event))
 		{

@@ -1,5 +1,6 @@
 #include"Player.h"
 #include"Declarations.h"
+#include"CalculateProjectileAngle.h"
 
 Player::Player()
 {
@@ -10,8 +11,9 @@ Player::Player()
 	yVel = 0;
 	WorldxPos = 100;
 	WorldyPos = 100;
-	xPos = (ScreenWidth - Character1->w)/2;
-	yPos = (ScreenHeight - Character1->h)/2;
+	CurrentSprite = D1;
+	xPos = (ScreenWidth - CurrentSprite->w)/2;
+	yPos = (ScreenHeight - CurrentSprite->h)/2;
 }
 
 void Player::HandleEvents()
@@ -78,8 +80,8 @@ void Player::UpdatePosition()
 {
 	WorldxPos += xVel;
 	WorldyPos += yVel;
-	xPos = (ScreenWidth - Character1->w)/2;
-	yPos = (ScreenHeight - Character1->h)/2;
+	xPos = (ScreenWidth - CurrentSprite->w)/2;
+	yPos = (ScreenHeight - CurrentSprite->h)/2;
 
 	if (WorldxPos < 500)
 	{
@@ -88,9 +90,9 @@ void Player::UpdatePosition()
 	}
 
 	
-	if (WorldxPos + Character1->w > 1500)
+	if (WorldxPos + CurrentSprite->w > Arena - 500)
 	{
-		WorldxPos = 1500 - Character1->w;
+		WorldxPos = Arena - 500 - CurrentSprite->w;
 		xVel = 0;
 	}
 	
@@ -102,33 +104,11 @@ void Player::UpdatePosition()
 	}
 
 	
-	if (WorldyPos + Character1->h > 1500)
+	if (WorldyPos + CurrentSprite->h > Arena - 500)
 	{
-		WorldyPos = 1500 - Character1->h;
+		WorldyPos = Arena - 500 - CurrentSprite->h;
 		yVel = 0;
 	}
-	
-	/*
-	if (xPos < 100)
-	{
-		xPos = 100;
-	}
-
-	if (xPos + Character1->w > 700)
-	{
-		xPos = (700 - Character1->w);
-	}
-
-	if (yPos < 100) 
-	{
-		yPos = 100;
-	}
-
-	if (yPos + Character1->h > 400)
-	{
-		yPos = 400 - (Character1->h);
-	}
-	*/
 }
 
 void Player::Fire()

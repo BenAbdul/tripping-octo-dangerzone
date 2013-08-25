@@ -19,20 +19,28 @@ extern std::stringstream SpareStream;
 extern const int ScreenWidth;
 extern const int ScreenHeight;
 extern const int ScreenBBP;
+extern const int Arena;
 
 extern SDL_Colour White;
 
 extern Uint8 *ArrowStates;
 
 extern SDL_Rect CursorClips[17];
+extern SDL_Rect BottomWall;
 
 extern SDL_Surface *Background;
-extern SDL_Surface *Character1;
 extern SDL_Surface *MenuBackground;
 extern SDL_Surface *Screen;
 extern SDL_Surface *Window;
 extern SDL_Surface *CursorSheet;
 extern SDL_Surface *PausedScreen;
+extern SDL_Surface *RShadow;
+extern SDL_Surface *LShadow;
+extern SDL_Surface *Shadow;
+extern SDL_Surface *D1;
+extern SDL_Surface *U1;
+extern SDL_Surface *L1;
+extern SDL_Surface *R1;
 
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;

@@ -50,18 +50,22 @@ std::stringstream SpareStream;
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
 const int ScreenBBP = 32;
+const int Arena = 6000;
 
 SDL_Colour White = {225,225,225};
 
 Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 
 SDL_Rect CursorClips[17];
+SDL_Rect BottomWall;
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
-SDL_Surface *Character1 = NULL;
 SDL_Surface *MenuBackground = NULL;
 SDL_Surface *CursorSheet = NULL;
+SDL_Surface *RShadow = NULL;
+SDL_Surface *LShadow = NULL;
+SDL_Surface *Shadow = NULL;
 TTF_Font *EightBitLimit = NULL;
 TTF_Font *KarmaFuture = NULL;
 TTF_Font *EightBitLimitSmall = NULL;
@@ -69,18 +73,27 @@ SDL_Surface *Message1 = NULL;
 SDL_Surface *Message2 = NULL;
 SDL_Surface *PausedScreen = NULL;
 SDL_Surface *Window = NULL;
+SDL_Surface *U1 = NULL;
+SDL_Surface *D1 = NULL;
+SDL_Surface *L1 = NULL;
+SDL_Surface *R1 = NULL;
 
 void LoadFiles()
 {
 	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
 	Background = LoadImage("Resources/Images/Background.png");
-	Character1 = LoadImage("Resources/Images/Character.png");
 	MenuBackground = LoadImage("Resources/Images/MenuBackground.png");
 	CursorSheet = LoadImage("Resources/Images/Cursor.png");
 	PausedScreen = LoadImage("Resources/Images/PauseScreen.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
 	KarmaFuture = TTF_OpenFont("Resources/Fonts/KarmaFuture.ttf",34);
 	EightBitLimitSmall = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",16);
+	U1 = LoadImage("Resources/Images/Character/U1.png");
+	D1 = LoadImage("Resources/Images/Character/D1.png");
+	L1 = LoadImage("Resources/Images/Character/L1.png");
+	R1 = LoadImage("Resources/Images/Character/R1.png");
+	RShadow = LoadImage("Resources/Images/50shadow.png");
+	LShadow = LoadImage("Resources/Images/27shadow.png");
 }
 
 bool SetClips()
@@ -99,6 +112,10 @@ bool SetClips()
 		SpareStream << "Cursor frame " << x << " begins at x = " << CursorClips[x].x << " and ends at " << CursorClips[x].x + CursorClips[x].w;
 		OpenDebugWindow(SpareStream.str());
 	}
+	BottomWall.x = 0;
+	BottomWall.y = 5500;
+	BottomWall.w = 6000;
+	BottomWall.h = 500;
 	if (CursorClips[2].w == 0) return false;
 	return true;
 }
@@ -107,13 +124,18 @@ bool CheckFiles()
 {
 	WasItInit = TTF_WasInit();
 	if (Background == NULL) return false;
-	else if (Character1 == NULL) return false;
 	else if (MenuBackground == NULL) return false;
 	else if (EightBitLimit == NULL) return false;
 	else if (CursorSheet == NULL) return false;
 	else if (KarmaFuture == NULL) return false;
 	else if (EightBitLimitSmall == NULL) return false;
 	else if (PausedScreen == NULL) return false;
+	else if (U1 == NULL) return false;
+	else if (R1 == NULL) return false;
+	else if (D1 == NULL) return false;
+	else if (L1 == NULL) return false;
+	else if (RShadow == NULL) return false;
+	else if (LShadow == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

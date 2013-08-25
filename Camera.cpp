@@ -1,4 +1,5 @@
 #include"Camera.h"
+#include"Declarations.h"
 #include "SDL.h"
 #include "Player.h"
 
@@ -19,7 +20,7 @@ void Camera::MoveCameraTo(int x, int y)
 	CameraRect.y = y + yOffSet;
 
 	if (CameraRect.x < -400) CameraRect.x = -400;
-	if (CameraRect.x > 1200) CameraRect.x = 1200;
+	if (CameraRect.x > Arena - 800) CameraRect.x = Arena - 800;
 	if (CameraRect.y < -400) CameraRect.y = -400;
-	if (CameraRect.y > 1400) CameraRect.y = 1400;
+	if (CameraRect.y > Arena - 500) CameraRect.y = Arena - 800;
 }

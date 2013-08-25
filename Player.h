@@ -1,5 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#include"Declarations.h"
 
 
 class Player
@@ -10,8 +11,10 @@ public:
 	int CurrentSelection;
 
 	int xVel, yVel;
-	int xPos, yPos;
+	float xPos, yPos;
 	int WorldxPos, WorldyPos;
+
+	SDL_Surface *CurrentSprite;
 
 	void HandleEvents();
 	void UpdatePosition();
