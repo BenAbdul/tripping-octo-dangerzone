@@ -47,6 +47,8 @@ bool PlaySound = true;
 
 std::stringstream SpareStream;
 
+std::vector <int> ProjectileVector;
+
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
 const int ScreenBBP = 32;

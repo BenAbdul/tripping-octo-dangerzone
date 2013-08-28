@@ -16,6 +16,8 @@ extern SDL_Event event;
 
 extern std::stringstream SpareStream;
 
+extern std::vector <int> ProjectileVector;
+
 extern const int ScreenWidth;
 extern const int ScreenHeight;
 extern const int ScreenBBP;
