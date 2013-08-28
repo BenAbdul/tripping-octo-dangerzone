@@ -97,16 +97,20 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Press n for a juicy debug log"; //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			DebugStream << "Current Angle" << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,100,Message2,Screen);
+			DebugStream.str("");
+			DebugStream << "Press n for a juicy debug log";
+			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
+			ApplySurface(0,125,Message2,Screen);
 			DebugStream.str("");
 			if(LDown == true) DebugStream << " Left ";
 			if(RDown == true) DebugStream << " Right";
 			if(UDown == true) DebugStream << " Up ";
 			if(DDown == true) DebugStream << " Down ";
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
-			ApplySurface(0,125,Message2,Screen);
+			ApplySurface(0,150,Message2,Screen);
 		}
 		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character.CurrentSprite->w)/2 , Character.WorldyPos - (ScreenHeight - Character.CurrentSprite->h)/2);
 		SDL_Flip(Screen);

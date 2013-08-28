@@ -1,23 +1,55 @@
 #include<math.h>
+#include"OpenDebugWindow.h"
+#define PI 3.14159265
 
 //Oh god no I hate trigonometry
 
-double CalculateProjectileAngle(float PlayerX, float PlayerY, float MouseX, float MouseY, bool PlayerDirection = false)
+double CalculateProjectileAngle(float PlayerX, float PlayerY, float MouseX, float MouseY)
 {
-	int Theta = 0;
-	if(PlayerX > MouseX && MouseY > PlayerY) { Theta = (atan((MouseY - PlayerY) / (PlayerX - MouseX))); if (PlayerDirection == true) return 1;} //If the mouse is to the top left of the player, 270 +
-	else if (MouseX > PlayerX && PlayerY > MouseY ){ Theta = (atan((PlayerY - MouseY) / (MouseX - PlayerX))); if (PlayerDirection == true) return 4;} //If the mouse is to the bottom right of the player 180 - 
-	else if (MouseX > PlayerX && MouseY > PlayerY) {Theta =  (atan((MouseY - PlayerY) / (MouseX - PlayerX))); if (PlayerDirection == true) return 2;} //If the mouse is to the top right of the player 90 -
-	else if (PlayerX > MouseX && PlayerY > MouseY){ Theta =  (atan((PlayerY - MouseY)/ (PlayerX - MouseX))); if (PlayerDirection == true) return 3;} //If the mouse is to the bottom left of the player 270 -
+	float Theta, Calculation;
+	PlayerY = 500 - PlayerY;
+	MouseY = 500 - MouseY; //I forgot the Y axis is inverted
+
+	if((PlayerX > MouseX) && (MouseY > PlayerY))//If the mouse is to the top left of the player
+	{
+		Calculation = (MouseY - PlayerY) / (PlayerX - MouseX);
+		Theta = atan(Calculation)* 180 / PI;
+		return 270 + Theta;
+	}
+
+	else if ((MouseY > PlayerY) && (MouseX > PlayerX)) //If the mouse is to the top right of the player
+	{
+		Calculation = (MouseY - PlayerY) / (MouseX - PlayerX);
+		Theta = atan(Calculation)* 180 / PI;
+		return 90 - Theta;
+	}
+
+	else if ((PlayerX > MouseX) && (PlayerY > MouseY)) //If the mouse is to the bottom left of the player
+	{
+		Calculation = (PlayerX - MouseX) / (PlayerY - MouseY);
+		Theta = atan(Calculation)* 180 / PI;
+		return 180 + Theta;
+	}
+
+	else if ((MouseX > PlayerX) && (PlayerY > MouseY)) //If the mouse is to the bottom right of the player
+	{
+		Calculation = (MouseX - PlayerX) / (PlayerY - MouseY);
+		Theta = atan(Calculation)* 180 / PI;
+		return 180 - Theta;
+	}
 	else if (MouseX == PlayerX)
 	{
-		if (MouseY > PlayerY) Theta = 0;
-		else Theta = 180;
+		if (MouseY > PlayerY) return 0;
+		else return 180;
 	}
 	else if (MouseY = PlayerY)
 	{
-		if(MouseX > PlayerX) Theta = 90;
-		else Theta = 270;
+		if(MouseX > PlayerX) return 90;
+		else return 270;
 	}
-	return Theta;
+	else 
+	{
+		OpenDebugWindow("Something has gone wrong in CalculateProjectileAngle");
+		return 999;
+	}
 }
