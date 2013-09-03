@@ -43,6 +43,7 @@ extern SDL_Surface *D1;
 extern SDL_Surface *U1;
 extern SDL_Surface *L1;
 extern SDL_Surface *R1;
+extern SDL_Surface *Projectile;
 
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;

@@ -79,6 +79,7 @@ SDL_Surface *U1 = NULL;
 SDL_Surface *D1 = NULL;
 SDL_Surface *L1 = NULL;
 SDL_Surface *R1 = NULL;
+SDL_Surface *Projectile = NULL;
 
 void LoadFiles()
 {
@@ -96,6 +97,7 @@ void LoadFiles()
 	R1 = LoadImage("Resources/Images/Character/R1.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
+	Projectile = LoadImage("Resources/Images/TempProjectile.png");
 }
 
 bool SetClips()
@@ -138,6 +140,7 @@ bool CheckFiles()
 	else if (L1 == NULL) return false;
 	else if (RShadow == NULL) return false;
 	else if (LShadow == NULL) return false;
+	else if (Projectile == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

@@ -9,6 +9,7 @@
 #include"ReturnPlayerDirection.h"
 #include"Pause.h"
 #include"OpenDebugWindow.h"
+#include"DoEnemyProjectiles.h"
 #include<windows.h>
 #include<sstream>
 
@@ -77,6 +78,7 @@ void Game()
 		ApplySurface(Character.xPos, Character.yPos + 20,Shadow,Screen);
 		ApplySurface(Character.xPos, Character.yPos, Character.CurrentSprite, Screen);
 		Mouse.Render();
+		DoEnemyProjectiles();
 		if(Debug = true)
 		{
 			std::stringstream DebugStream;
@@ -149,6 +151,20 @@ void Game()
 				if(event.key.keysym.sym == SDLK_RIGHT) RDown = false;
 				if(event.key.keysym.sym == SDLK_UP) UDown = false;
 				if(event.key.keysym.sym == SDLK_DOWN) DDown = false;
+			}
+
+			if(event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				ProjectileVector.push_back(Character.xPos);
+				ProjectileVector.push_back(Character.yPos);
+				ProjectileVector.push_back(0);
+				ProjectileVector.push_back(0);
+				ProjectileVector.push_back(1);
+				ProjectileVector.push_back(-1);
+				ProjectileVector.push_back(1);
+				SpareStream.str("");
+				SpareStream << "ProjectileVector.size() returns " << ProjectileVector.size();
+				OpenDebugWindow(SpareStream.str());
 			}
 
 			if(event.type == SDL_MOUSEMOTION)
