@@ -1,3 +1,5 @@
+#define PI 3.14159265359
+
 #include"Declarations.h"
 #include"Timer.h"
 #include"Player.h"
@@ -10,6 +12,8 @@
 #include"Pause.h"
 #include"OpenDebugWindow.h"
 #include"DoEnemyProjectiles.h"
+#include"GetXYRatio.h"
+#include<math.h>
 #include<windows.h>
 #include<sstream>
 
@@ -25,13 +29,15 @@ void Game()
 	Player Character;
 	Camera Viewport;
 	bool Debug = false;
-	int Temp;
+	int Temp, xRatio, yRatio = 0;
 	PlayRandomMusic();
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
 		Character.HandleEvents();
 		Character.UpdatePosition();
+		CameraX = Viewport.CameraRect.x;
+		CameraY = Viewport.CameraRect.y;
 		int PlayerDirection = ReturnPlayerDirection(Mouse.MouseX,Mouse.MouseY);
 		switch(PlayerDirection)
 		{
@@ -48,38 +54,36 @@ void Game()
 		case 8:
 		case 9: Character.CurrentSprite = D1; break;
 		}
+
+		XChange = 0;
+		YChange = 0;
+
 		if(Mouse.MouseX > 700) 
 		{
 			Viewport.CameraRect.x += (Mouse.MouseX - 700) *1.2;
-			Character.xPos -= (Mouse.MouseX - 700)*1.2;
 		}
 
-		if(Mouse.MouseX < 100) 
+		else if(Mouse.MouseX < 100) 
 		{
 			Viewport.CameraRect.x -= (100 - Mouse.MouseX)* 1.2;
-			Character.xPos += (100 - Mouse.MouseX)* 1.2;
 		}
 
-		if(Mouse.MouseY > 400) 
+		else if(Mouse.MouseY > 400) 
 		{
 			Viewport.CameraRect.y += (Mouse.MouseY - 400)* 1.2;
-			Character.yPos -= (Mouse.MouseY - 400)* 1.2;
 		}
 
-		if(Mouse.MouseY < 100) 
+		else if(Mouse.MouseY < 100) 
 		{
 			Viewport.CameraRect.y -= (100 - Mouse.MouseY)* 1.5;
-			Character.yPos += (100 - Mouse.MouseY) * 1.5;
 		}
 
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
-		if(Character.CurrentSprite->w == 21) Shadow = RShadow;
-		else Shadow = LShadow;
-		ApplySurface(Character.xPos, Character.yPos + 20,Shadow,Screen);
-		ApplySurface(Character.xPos, Character.yPos, Character.CurrentSprite, Screen);
+		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
 		Mouse.Render();
 		DoEnemyProjectiles();
-		if(Debug = true)
+		ApplySurface(0,500 - HUD->h,HUD,Screen);
+		if(Debug == true)
 		{
 			std::stringstream DebugStream;
 			DebugStream.str("");
@@ -87,7 +91,7 @@ void Game()
 			Message1 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,0,Message1,Screen);
 			DebugStream.str("");
-			DebugStream << "Character screen position " << Character.xPos << " - " << Character.yPos;
+			DebugStream << "Character screen position " << Character.WorldxPos - Viewport.CameraRect.x << " - " << Character.WorldyPos - Viewport.CameraRect.y;
 			Message1 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,25,Message1,Screen);
 			DebugStream.str("");
@@ -99,13 +103,18 @@ void Game()
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,75,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Current Angle" << CalculateProjectileAngle(Character.xPos,Character.yPos,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
+			DebugStream << "Current Angle " << CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY); //(int PlayerX, int PlayerY, int MouseX, int MouseY)
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,100,Message2,Screen);
 			DebugStream.str("");
-			DebugStream << "Press n for a juicy debug log";
+		    GetXYRatio(&xRatio,&yRatio,Mouse.MouseX,Mouse.MouseY,Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y);
+			DebugStream << "Current X to Y ratio " << xRatio << " - " << yRatio;
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,125,Message2,Screen);
+			DebugStream.str("");
+			DebugStream << "Press n for a juicy debug log";
+			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
+			ApplySurface(0,150,Message2,Screen);
 			DebugStream.str("");
 			if(LDown == true) DebugStream << " Left ";
 			if(RDown == true) DebugStream << " Right";
@@ -155,15 +164,27 @@ void Game()
 
 			if(event.type == SDL_MOUSEBUTTONDOWN)
 			{
-				ProjectileVector.push_back(Character.xPos);
-				ProjectileVector.push_back(Character.yPos);
+				/*
+				Series for projectile vector
+			... xPos,yPos,Frame,Frametime,xRatio,yRatio,Active ... (7 variables)
+				= x										 = x+6
+				*/
+				
+				ProjectileVector.push_back(Character.WorldxPos);
+				ProjectileVector.push_back(Character.WorldyPos);
 				ProjectileVector.push_back(0);
 				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(1);
-				ProjectileVector.push_back(-1);
+				ProjectileVector.push_back(
+					cos(
+					CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY))
+					*5 * 180 / PI ); //Life is suffering
+				ProjectileVector.push_back(
+					sin(
+					500 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY)) 
+					*5 * 180 / PI );
 				ProjectileVector.push_back(1);
 				SpareStream.str("");
-				SpareStream << "ProjectileVector.size() returns " << ProjectileVector.size();
+				SpareStream << "Projectile created with ratio y += " << -1 << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
 				OpenDebugWindow(SpareStream.str());
 			}
 

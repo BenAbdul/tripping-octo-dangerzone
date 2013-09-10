@@ -12,8 +12,7 @@ Player::Player()
 	WorldxPos = 100;
 	WorldyPos = 100;
 	CurrentSprite = D1;
-	xPos = (ScreenWidth - CurrentSprite->w)/2;
-	yPos = (ScreenHeight - CurrentSprite->h)/2;
+
 }
 
 void Player::HandleEvents()
@@ -80,8 +79,6 @@ void Player::UpdatePosition()
 {
 	WorldxPos += xVel;
 	WorldyPos += yVel;
-	xPos = (ScreenWidth - CurrentSprite->w)/2;
-	yPos = (ScreenHeight - CurrentSprite->h)/2;
 
 	if (WorldxPos < 500)
 	{
@@ -109,9 +106,4 @@ void Player::UpdatePosition()
 		WorldyPos = Arena - 500 - CurrentSprite->h;
 		yVel = 0;
 	}
-}
-
-void Player::Fire()
-{
-	//I aint no magician
 }

@@ -27,14 +27,11 @@ SDL_Surface *LoadImage( std::string filename )
     }
     return OptimizedImage;
 }
- 
-void ApplySurface( int x, int y, SDL_Surface* Source, SDL_Surface* Destination, SDL_Rect* Clip)
-{
-    SDL_Rect offset;
-	offset.x = x;
-    offset.y = y;
-    SDL_BlitSurface( Source, Clip, Destination, &offset );
-}
+
+int CameraX = NULL;
+int CameraY = NULL;
+int XChange = 0;
+int YChange = 0;
 
 SDL_Event event;
 
@@ -80,6 +77,7 @@ SDL_Surface *D1 = NULL;
 SDL_Surface *L1 = NULL;
 SDL_Surface *R1 = NULL;
 SDL_Surface *Projectile = NULL;
+SDL_Surface *HUD = NULL;
 
 void LoadFiles()
 {
@@ -98,6 +96,7 @@ void LoadFiles()
 	RShadow = LoadImage("Resources/Images/50shadow.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
+	HUD = LoadImage("Resources/Images/UI.png");
 }
 
 bool SetClips()
@@ -112,9 +111,6 @@ bool SetClips()
 		CursorClips[x].w = 38;
 		CursorClips[x].h = 38;
 		if (x == 15) CursorClips[x].w = 34;
-		SpareStream.str("");
-		SpareStream << "Cursor frame " << x << " begins at x = " << CursorClips[x].x << " and ends at " << CursorClips[x].x + CursorClips[x].w;
-		OpenDebugWindow(SpareStream.str());
 	}
 	BottomWall.x = 0;
 	BottomWall.y = 5500;
@@ -122,6 +118,14 @@ bool SetClips()
 	BottomWall.h = 500;
 	if (CursorClips[2].w == 0) return false;
 	return true;
+}
+
+void ApplySurface( int x, int y, SDL_Surface* Source, SDL_Surface* Destination, SDL_Rect* Clip)
+{
+    SDL_Rect offset;
+	offset.x = x + XChange;
+    offset.y = y + YChange;
+    SDL_BlitSurface( Source, Clip, Destination, &offset );
 }
 
 bool CheckFiles()
@@ -146,5 +150,6 @@ bool CheckFiles()
 }
 
 bool Quit = false;
+
 
 Gamestate State = MENU;

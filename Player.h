@@ -11,14 +11,12 @@ public:
 	int CurrentSelection;
 
 	int xVel, yVel;
-	float xPos, yPos;
 	int WorldxPos, WorldyPos;
 
 	SDL_Surface *CurrentSprite;
 
 	void HandleEvents();
 	void UpdatePosition();
-	void Fire();
 
 	Player();
 };

@@ -44,6 +44,7 @@ extern SDL_Surface *U1;
 extern SDL_Surface *L1;
 extern SDL_Surface *R1;
 extern SDL_Surface *Projectile;
+extern SDL_Surface *HUD;
 
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
@@ -59,6 +60,11 @@ extern bool RDown;
 extern bool UDown;
 extern bool DDown;
 extern bool PlaySound;
+
+extern int CameraX;
+extern int CameraY;
+extern int XChange;
+extern int YChange;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;
