@@ -7,28 +7,42 @@ void GetXYRatio(int *xRatio, int *yRatio, int x, int y, int PlayerX, int PlayerY
 {
 	y = 500 - y;
 	PlayerY = 500 - y;
+	double DeltaX, DeltaY;
+	double Distance;
 
 	if (x < PlayerX &&  y > PlayerY) //Top left
 	{
-		(*xRatio) = -1;
-		(*yRatio) = y / (x * -1);
+		DeltaX = PlayerX - x;
+		DeltaY = y - PlayerY;
+		Distance = sqrt(DeltaX + DeltaY);
+		(*xRatio) = (DeltaX *-1) / Distance;
+		(*yRatio) = DeltaY / Distance;
 	}
 
 	else if (x > PlayerX &&  y > PlayerY) //Top right
 	{
-		(*xRatio) = 1;
-		(*yRatio) = y / x;
+		DeltaX = x - PlayerX;
+		DeltaY = y - PlayerY;
+		Distance = sqrt(DeltaX + DeltaY);
+		(*xRatio) = DeltaX / Distance;
+		(*yRatio) = DeltaY / Distance;
 	}
 
 	else if (x < PlayerX &&  y < PlayerY) //Bottom left
 	{
-		(*xRatio) = -1;
-		(*yRatio) = (y * -1) / (x * -1);
+		DeltaX = PlayerX - x;
+		DeltaY = PlayerY - y;
+		Distance = sqrt(DeltaX + DeltaY);
+		(*xRatio) = (DeltaX * -1) / Distance;
+		(*yRatio) = (DeltaY * -1) / Distance;
 	}
 
 	else if (x > PlayerX &&  y < PlayerY) //Bottom right
 	{
-		(*xRatio) = 1;
-		(*yRatio) = (y * -1) / x;
+		DeltaX = x - PlayerX;
+		DeltaY = PlayerY - y;
+		Distance = sqrt(DeltaX + DeltaY);
+		(*xRatio) = DeltaX / Distance;
+		(*yRatio) = (DeltaY * -1) / Distance;
 	}
 }

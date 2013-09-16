@@ -27,7 +27,7 @@ void DoEnemyProjectiles()
 			XPOS += XRATIO;
 			YPOS += YRATIO;
 
-			ApplySurface(YPOS - CameraX ,YPOS - CameraY,Projectile,Screen);
+			ApplySurface(XPOS - CameraX ,YPOS - CameraY,Projectile,Screen);
 		}
 	}
 }

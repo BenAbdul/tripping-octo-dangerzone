@@ -174,14 +174,8 @@ void Game()
 				ProjectileVector.push_back(Character.WorldyPos);
 				ProjectileVector.push_back(0);
 				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(
-					cos(
-					CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY))
-					*5 * 180 / PI ); //Life is suffering
-				ProjectileVector.push_back(
-					sin(
-					500 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY)) 
-					*5 * 180 / PI );
+				ProjectileVector.push_back(xRatio); //Life is suffering
+				ProjectileVector.push_back(yRatio * -1);
 				ProjectileVector.push_back(1);
 				SpareStream.str("");
 				SpareStream << "Projectile created with ratio y += " << -1 << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
