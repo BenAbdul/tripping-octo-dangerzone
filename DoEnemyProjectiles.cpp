@@ -24,10 +24,18 @@ void DoEnemyProjectiles()
 		{
 			if(ACTIVE == 0) continue;
 
+			FRAMETIME += 1;
+			if(FRAMETIME == 2)
+			{
+				FRAMETIME = 0;
+				FRAME += 1;
+			}
+			if(FRAME == 2) FRAME = 0;
+
 			XPOS += XRATIO;
 			YPOS += YRATIO;
 
-			ApplySurface(XPOS - CameraX ,YPOS - CameraY,Projectile,Screen);
+			ApplySurface(XPOS - CameraX ,YPOS - CameraY,Projectile,Screen,&ProjectileClips[FRAME]);
 		}
 	}
 }

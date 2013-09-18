@@ -56,7 +56,7 @@ SDL_Colour White = {225,225,225};
 Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 
 SDL_Rect CursorClips[17];
-SDL_Rect BottomWall;
+SDL_Rect ProjectileClips[2];
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
@@ -78,6 +78,7 @@ SDL_Surface *L1 = NULL;
 SDL_Surface *R1 = NULL;
 SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
+SDL_Surface *Sniper = NULL;
 
 void LoadFiles()
 {
@@ -97,6 +98,7 @@ void LoadFiles()
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
 	HUD = LoadImage("Resources/Images/UI.png");
+	Sniper = LoadImage("Resources/Images/LeSniper.png");
 }
 
 bool SetClips()
@@ -112,10 +114,17 @@ bool SetClips()
 		CursorClips[x].h = 38;
 		if (x == 15) CursorClips[x].w = 34;
 	}
-	BottomWall.x = 0;
-	BottomWall.y = 5500;
-	BottomWall.w = 6000;
-	BottomWall.h = 500;
+	
+	ProjectileClips[0].h = 11;
+	ProjectileClips[0].w = 11;
+	ProjectileClips[0].x = 0;
+	ProjectileClips[0].y = 0;
+
+	ProjectileClips[1].h = 11;
+	ProjectileClips[1].w = 11;
+	ProjectileClips[1].x = 12;
+	ProjectileClips[1].y = 0;
+
 	if (CursorClips[2].w == 0) return false;
 	return true;
 }
@@ -145,6 +154,7 @@ bool CheckFiles()
 	else if (RShadow == NULL) return false;
 	else if (LShadow == NULL) return false;
 	else if (Projectile == NULL) return false;
+	else if (Sniper == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

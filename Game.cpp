@@ -13,6 +13,7 @@
 #include"OpenDebugWindow.h"
 #include"DoEnemyProjectiles.h"
 #include"GetXYRatio.h"
+#include<SDL_rotozoom.h>
 #include<math.h>
 #include<windows.h>
 #include<sstream>
@@ -28,6 +29,7 @@ void Game()
 	Timer FPS;
 	Player Character;
 	Camera Viewport;
+	SDL_Surface *Weapon;
 	bool Debug = false;
 	int Temp, xRatio, yRatio = 0;
 	PlayRandomMusic();
@@ -80,6 +82,8 @@ void Game()
 
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
 		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
+		Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
+		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Weapon,Screen);
 		Mouse.Render();
 		DoEnemyProjectiles();
 		ApplySurface(0,500 - HUD->h,HUD,Screen);
@@ -121,7 +125,7 @@ void Game()
 			if(UDown == true) DebugStream << " Up ";
 			if(DDown == true) DebugStream << " Down ";
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
-			ApplySurface(0,150,Message2,Screen);
+			ApplySurface(0,175,Message2,Screen);
 		}
 		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character.CurrentSprite->w)/2 , Character.WorldyPos - (ScreenHeight - Character.CurrentSprite->h)/2);
 		SDL_Flip(Screen);
