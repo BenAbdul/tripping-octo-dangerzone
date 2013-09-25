@@ -16,7 +16,7 @@ extern SDL_Event event;
 
 extern std::stringstream SpareStream;
 
-extern std::vector <int> ProjectileVector;
+extern std::vector <double> ProjectileVector;
 
 extern const int ScreenWidth;
 extern const int ScreenHeight;
@@ -66,6 +66,7 @@ extern int CameraX;
 extern int CameraY;
 extern int XChange;
 extern int YChange;
+extern int EnemyID;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;

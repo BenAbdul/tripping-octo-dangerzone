@@ -32,6 +32,7 @@ int CameraX = NULL;
 int CameraY = NULL;
 int XChange = 0;
 int YChange = 0;
+int EnemyID = 0;
 
 SDL_Event event;
 
@@ -44,7 +45,7 @@ bool PlaySound = true;
 
 std::stringstream SpareStream;
 
-std::vector <int> ProjectileVector;
+std::vector <double> ProjectileVector;
 
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
@@ -160,6 +161,5 @@ bool CheckFiles()
 }
 
 bool Quit = false;
-
 
 Gamestate State = MENU;

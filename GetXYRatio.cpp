@@ -1,9 +1,8 @@
 #include "GetXYRatio.h"
 #include "Declarations.h"
 
-// Ratio/Gradient will be 1/-1:y
 
-void GetXYRatio(int *xRatio, int *yRatio, int x, int y, int PlayerX, int PlayerY)
+void GetXYRatio(double *xRatio, double *yRatio, double x, double y, double PlayerX, double PlayerY)
 {
 	y = 500 - y;
 	PlayerY = 500 - y;

@@ -10,6 +10,7 @@
 #include"CalculateProjectileAngle.h"
 #include"ReturnPlayerDirection.h"
 #include"Pause.h"
+#include"DoEnemies.h"
 #include"OpenDebugWindow.h"
 #include"DoEnemyProjectiles.h"
 #include"GetXYRatio.h"
@@ -31,7 +32,8 @@ void Game()
 	Camera Viewport;
 	SDL_Surface *Weapon;
 	bool Debug = false;
-	int Temp, xRatio, yRatio = 0;
+	int Temp;
+	double xRatio, yRatio = 0;
 	PlayRandomMusic();
 	while (Quit == false && State == GAME)
 	{
@@ -83,7 +85,7 @@ void Game()
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
 		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
 		Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
-		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Weapon,Screen);
+		ApplySurface((Character.WorldxPos - Viewport.CameraRect.x) - 50,(Character.WorldyPos - Viewport.CameraRect.y) - 50,Weapon,Screen);
 		Mouse.Render();
 		DoEnemyProjectiles();
 		ApplySurface(0,500 - HUD->h,HUD,Screen);
@@ -152,6 +154,11 @@ void Game()
 					Pause();
 				}
 
+				if(event.key.keysym.sym == SDLK_e && Debug == true)
+				{
+					CreateEnemy();
+				}
+
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 				{
 					Pause();
@@ -178,7 +185,7 @@ void Game()
 				ProjectileVector.push_back(Character.WorldyPos);
 				ProjectileVector.push_back(0);
 				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(xRatio); //Life is suffering
+				ProjectileVector.push_back(xRatio);
 				ProjectileVector.push_back(yRatio * -1);
 				ProjectileVector.push_back(1);
 				SpareStream.str("");

@@ -32,10 +32,10 @@ void DoEnemyProjectiles()
 			}
 			if(FRAME == 2) FRAME = 0;
 
-			XPOS += XRATIO;
-			YPOS += YRATIO;
-
-			ApplySurface(XPOS - CameraX ,YPOS - CameraY,Projectile,Screen,&ProjectileClips[FRAME]);
+			XPOS = XPOS + XRATIO;
+			YPOS = YPOS + YRATIO;
+			int LeFrame = FRAME;
+			ApplySurface(XPOS - CameraX ,YPOS - CameraY,Projectile,Screen,&ProjectileClips[LeFrame]);
 		}
 	}
 }
