@@ -28,11 +28,12 @@ SDL_Surface *LoadImage( std::string filename )
     return OptimizedImage;
 }
 
-int CameraX = NULL;
-int CameraY = NULL;
+int CameraX = 0;
+int CameraY = 0;
 int XChange = 0;
 int YChange = 0;
 int EnemyID = 0;
+int PlayerX, PlayerY = 0;
 
 SDL_Event event;
 
@@ -80,6 +81,7 @@ SDL_Surface *R1 = NULL;
 SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
 SDL_Surface *Sniper = NULL;
+SDL_Surface *EnemyClips = NULL;
 
 void LoadFiles()
 {
@@ -95,6 +97,7 @@ void LoadFiles()
 	D1 = LoadImage("Resources/Images/Character/D1.png");
 	L1 = LoadImage("Resources/Images/Character/L1.png");
 	R1 = LoadImage("Resources/Images/Character/R1.png");
+	EnemyClips = LoadImage("Resources/Images/Character/Rapist.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");

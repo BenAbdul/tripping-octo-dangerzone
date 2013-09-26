@@ -49,6 +49,7 @@ extern SDL_Surface *HUD;
 extern SDL_Surface *Sniper;
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
+extern SDL_Surface *EnemyClips;
 
 extern TTF_Font *KarmaFuture;
 extern TTF_Font *EightBitLimit;
@@ -67,6 +68,8 @@ extern int CameraY;
 extern int XChange;
 extern int YChange;
 extern int EnemyID;
+extern int PlayerX;
+extern int PlayerY;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;

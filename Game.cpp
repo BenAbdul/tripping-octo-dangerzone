@@ -38,6 +38,8 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
+		PlayerX = Character.WorldxPos;
+		PlayerY = Character.WorldyPos; // le lazy interface
 		Character.HandleEvents();
 		Character.UpdatePosition();
 		CameraX = Viewport.CameraRect.x;
@@ -87,6 +89,7 @@ void Game()
 		Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
 		ApplySurface((Character.WorldxPos - Viewport.CameraRect.x) - 50,(Character.WorldyPos - Viewport.CameraRect.y) - 50,Weapon,Screen);
 		Mouse.Render();
+		DoEnemies();
 		DoEnemyProjectiles();
 		ApplySurface(0,500 - HUD->h,HUD,Screen);
 		if(Debug == true)
