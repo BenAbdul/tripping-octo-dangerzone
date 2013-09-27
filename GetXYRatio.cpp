@@ -5,7 +5,8 @@
 void GetXYRatio(double *xRatio, double *yRatio, double x, double y, double PlayerX, double PlayerY)
 {
 	y = 500 - y;
-	PlayerY = 500 - y;
+	PlayerY = 486 - PlayerY;
+	PlayerX = PlayerX + 15;
 	double DeltaX, DeltaY;
 	double Distance;
 

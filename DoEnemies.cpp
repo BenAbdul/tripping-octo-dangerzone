@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-	if(CameraX > 2500) xPos = CameraX;
+	if(CameraX > 2500) xPos = CameraX - 10;
 	else xPos = CameraX + 10;
 
 	if(CameraY > 2500) yPos = CameraY;
@@ -20,20 +20,46 @@ std::vector<Enemy> EnemyVector;
 #define CURRENTCLASS EnemyVector.at(x)
 void DoEnemies()
 {
-	if(EnemyVector.size() > 1)
+	if(EnemyVector.size() >= 1)
 	{
 		for(int x = 0; x < EnemyVector.size(); x++)
 		{
-			if(CURRENTCLASS.xPos > PlayerX && CURRENTCLASS.xVel >= -5) CURRENTCLASS.xVel--;
-			else if (CURRENTCLASS.xPos < PlayerX && CURRENTCLASS.xVel <= 5) CURRENTCLASS.xVel++;
+			if(CURRENTCLASS.xPos > PlayerX + 100 && CURRENTCLASS.xVel >= -5) 
+			{
+				CURRENTCLASS.xVel--;
+				SpareStream.str("");
+				SpareStream << "Enemy xPos " << CURRENTCLASS.xPos << " is more than player xPos " << PlayerX;
+				OpenDebugWindow(SpareStream.str());
+			}
+			else if (CURRENTCLASS.xPos < PlayerX + 100 && CURRENTCLASS.xVel <= 5) 
+			{
+				CURRENTCLASS.xVel++;
+				SpareStream.str("");
+				SpareStream << "Enemy xPos " << CURRENTCLASS.xPos << " is less than player xPos " << PlayerX;
+				OpenDebugWindow(SpareStream.str());
+			}
 			
-			if(CURRENTCLASS.yPos > PlayerY && CURRENTCLASS.yVel >= -5) CURRENTCLASS.yVel--;
-			else if (CURRENTCLASS.yPos < PlayerY && CURRENTCLASS.yVel <= 5) CURRENTCLASS.yVel++;
+			if(CURRENTCLASS.yPos > PlayerY + 100 && CURRENTCLASS.yVel >= -5) 	
+			{
+				CURRENTCLASS.yVel--;
+				SpareStream.str("");
+				SpareStream << "Enemy yPos " << CURRENTCLASS.yPos << " is more than player yPos " << PlayerY;
+				OpenDebugWindow(SpareStream.str());
+			}
+			else if (CURRENTCLASS.yPos < PlayerY + 100 && CURRENTCLASS.yVel <= 5) 
+			{
+				CURRENTCLASS.yVel++;
+				SpareStream.str("");
+				SpareStream << "Enemy yPos " << CURRENTCLASS.yPos << " is less than player yPos " << PlayerY;
+				OpenDebugWindow(SpareStream.str());
+			}
 
 			CURRENTCLASS.xPos += CURRENTCLASS.xVel;
 			CURRENTCLASS.yPos += CURRENTCLASS.yVel;
 
-			ApplySurface(CameraX - CURRENTCLASS.xPos,CameraY - CURRENTCLASS.yPos, EnemyClips, Screen);
+			int OtherX = CameraX - CURRENTCLASS.xPos; //Easier to debug when this inevitably doesn't werk
+			int OtherM = CameraY - CURRENTCLASS.yPos;
+			ApplySurface(OtherX,OtherM, D1, Screen);
 		}
 	}
 }

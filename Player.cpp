@@ -87,7 +87,7 @@ void Player::UpdatePosition()
 	}
 
 	
-	if (WorldxPos + CurrentSprite->w > Arena - 500)
+	else if (WorldxPos + CurrentSprite->w > Arena - 500)
 	{
 		WorldxPos = Arena - 500 - CurrentSprite->w;
 		xVel = 0;
@@ -101,7 +101,7 @@ void Player::UpdatePosition()
 	}
 
 	
-	if (WorldyPos + CurrentSprite->h > Arena - 500)
+	else if (WorldyPos + CurrentSprite->h > Arena - 500)
 	{
 		WorldyPos = Arena - 500 - CurrentSprite->h;
 		yVel = 0;
