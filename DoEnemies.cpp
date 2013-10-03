@@ -24,47 +24,21 @@ void DoEnemies()
 	{
 		for(int x = 0; x < EnemyVector.size(); x++)
 		{
-			if(CURRENTCLASS.xPos > PlayerX + 100 && CURRENTCLASS.xVel >= -5) 
-			{
-				CURRENTCLASS.xVel--;
-				SpareStream.str("");
-				SpareStream << "Enemy xPos " << CURRENTCLASS.xPos << " is more than player xPos " << PlayerX;
-				OpenDebugWindow(SpareStream.str());
-			}
-			else if (CURRENTCLASS.xPos < PlayerX + 100 && CURRENTCLASS.xVel <= 5) 
-			{
-				CURRENTCLASS.xVel++;
-				SpareStream.str("");
-				SpareStream << "Enemy xPos " << CURRENTCLASS.xPos << " is less than player xPos " << PlayerX;
-				OpenDebugWindow(SpareStream.str());
-			}
-			
-			if(CURRENTCLASS.yPos > PlayerY + 100 && CURRENTCLASS.yVel >= -5) 	
-			{
-				CURRENTCLASS.yVel--;
-				SpareStream.str("");
-				SpareStream << "Enemy yPos " << CURRENTCLASS.yPos << " is more than player yPos " << PlayerY;
-				OpenDebugWindow(SpareStream.str());
-			}
-			else if (CURRENTCLASS.yPos < PlayerY + 100 && CURRENTCLASS.yVel <= 5) 
-			{
-				CURRENTCLASS.yVel++;
-				SpareStream.str("");
-				SpareStream << "Enemy yPos " << CURRENTCLASS.yPos << " is less than player yPos " << PlayerY;
-				OpenDebugWindow(SpareStream.str());
-			}
-
+			if (CURRENTCLASS.xPos > PlayerX && CURRENTCLASS.xVel >= -5) CURRENTCLASS.xVel--;
+			else if (CURRENTCLASS.xPos < PlayerX && CURRENTCLASS.xVel <= 5) CURRENTCLASS.xVel++;
+			if (CURRENTCLASS.yPos > PlayerY && CURRENTCLASS.yVel >=-5) CURRENTCLASS.yVel--;
+			else if (CURRENTCLASS.yPos < PlayerY && CURRENTCLASS.yVel <= 5) CURRENTCLASS.yVel++;
 			CURRENTCLASS.xPos += CURRENTCLASS.xVel;
 			CURRENTCLASS.yPos += CURRENTCLASS.yVel;
-
-			int OtherX = CameraX - CURRENTCLASS.xPos; //Easier to debug when this inevitably doesn't werk
-			int OtherM = CameraY - CURRENTCLASS.yPos;
-			ApplySurface(OtherX,OtherM, D1, Screen);
+			ApplySurface(PlayerX - CameraX, PlayerY - CameraY,D1,Screen);
 		}
 	}
 }
 void CreateEnemy()
 {
 	Enemy TopLel;
+	SpareStream.str("");
+	SpareStream << "New enemy created at (" << TopLel.xPos << "," << TopLel.yPos <<")";
+	OpenDebugWindow(SpareStream.str());
 	EnemyVector.push_back(TopLel);
 }

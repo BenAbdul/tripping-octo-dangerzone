@@ -38,10 +38,10 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
-		PlayerX = Character.WorldxPos;
-		PlayerY = Character.WorldyPos; // le lazy interface
 		Character.HandleEvents();
 		Character.UpdatePosition();
+		PlayerX = Character.WorldxPos;
+		PlayerY = Character.WorldyPos;
 		CameraX = Viewport.CameraRect.x;
 		CameraY = Viewport.CameraRect.y;
 		int PlayerDirection = ReturnPlayerDirection(Mouse.MouseX,Mouse.MouseY);
@@ -74,7 +74,7 @@ void Game()
 			Viewport.CameraRect.x -= (100 - Mouse.MouseX)* 1.2;
 		}
 
-		else if(Mouse.MouseY > 400) 
+		if(Mouse.MouseY > 400) 
 		{
 			Viewport.CameraRect.y += (Mouse.MouseY - 400)* 1.2;
 		}
@@ -192,7 +192,7 @@ void Game()
 				ProjectileVector.push_back(yRatio * -1);
 				ProjectileVector.push_back(1);
 				SpareStream.str("");
-				SpareStream << "Projectile created with ratio y += " << -1 << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
+				SpareStream << "Projectile created with ratio X += " << xRatio << " Y += " << yRatio << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
 				OpenDebugWindow(SpareStream.str());
 			}
 

@@ -41,7 +41,7 @@ void Player::HandleEvents()
 		else yVel += 1;
 	}
 
-	if (UDown == false && DDown == false &&  LDown == false && RDown == false)
+	if (UDown == false && DDown == false)
 	{
 		if (yVel != 0)
 		{
@@ -57,7 +57,9 @@ void Player::HandleEvents()
 				else yVel += 3;
 			}
 		}
-
+	}
+	if(LDown == false && RDown == false)
+	{
 		if (xVel != 0)
 		{
 			if (xVel > 0)
