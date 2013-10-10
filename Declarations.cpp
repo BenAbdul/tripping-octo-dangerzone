@@ -42,7 +42,8 @@ bool LDown = false;
 bool RDown = false;
 bool UDown = false;
 bool DDown = false;
-bool PlaySound = true;
+bool PlsPlaySound = true;
+bool LazyDebug = false;
 
 std::stringstream SpareStream;
 
@@ -59,6 +60,7 @@ Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 
 SDL_Rect CursorClips[17];
 SDL_Rect ProjectileClips[2];
+SDL_Rect EnemyDownClipRect[7];
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
@@ -81,7 +83,7 @@ SDL_Surface *R1 = NULL;
 SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
 SDL_Surface *Sniper = NULL;
-SDL_Surface *EnemyClips = NULL;
+SDL_Surface *EnemyDownClips = NULL;
 
 void LoadFiles()
 {
@@ -97,7 +99,7 @@ void LoadFiles()
 	D1 = LoadImage("Resources/Images/Character/D1.png");
 	L1 = LoadImage("Resources/Images/Character/L1.png");
 	R1 = LoadImage("Resources/Images/Character/R1.png");
-	EnemyClips = LoadImage("Resources/Images/Character/Rapist.png");
+	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
@@ -117,6 +119,14 @@ bool SetClips()
 		CursorClips[x].w = 38;
 		CursorClips[x].h = 38;
 		if (x == 15) CursorClips[x].w = 34;
+	}
+
+	for(int x = 0; x < 8; x++)
+	{
+		EnemyDownClipRect[x].x = (x * 49);
+		EnemyDownClipRect[x].y = 0;
+		EnemyDownClipRect[x].w = 49;
+		EnemyDownClipRect[x].h = 36;
 	}
 	
 	ProjectileClips[0].h = 11;
@@ -159,6 +169,7 @@ bool CheckFiles()
 	else if (LShadow == NULL) return false;
 	else if (Projectile == NULL) return false;
 	else if (Sniper == NULL) return false;
+	else if (EnemyDownClips == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

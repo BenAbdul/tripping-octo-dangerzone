@@ -7,6 +7,7 @@ extern class Enemy
 public:
 	int xPos, yPos;
 	int xVel,yVel;
+	int Frame, FrameTime;
 	int Active;
 	Enemy();
 };

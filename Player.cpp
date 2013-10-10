@@ -19,25 +19,25 @@ void Player::HandleEvents()
 {
 	if (LDown == true)
 	{
-		if (xVel - 1 < -20) xVel = -10;
+		if (xVel - 1 < -20) xVel = -20;
 		else xVel -=1;
 	}
 
 	if (RDown == true)
 	{
-		if (xVel + 1 > 20) xVel = 10;
+		if (xVel + 1 > 20) xVel = 20;
 		else xVel += 1;
 	}
 
 	if (UDown == true)
 	{
-		if (yVel - 1 < -20) yVel = -10;
+		if (yVel - 1 < -20) yVel = -20;
 		else yVel -= 1;
 	}
 
 	if (DDown == true)
 	{
-		if (yVel + 1 > 20) yVel = 10;
+		if (yVel + 1 > 20) yVel = 20;
 		else yVel += 1;
 	}
 

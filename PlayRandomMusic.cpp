@@ -3,7 +3,7 @@
 
 void PlayRandomMusic()
 {
-	if (PlaySound == true)
+	if (PlsPlaySound == true)
 	{
 		srand((time(NULL) * time(NULL)) / 100);
 		int ChosenSong = rand () %  8 + 1;

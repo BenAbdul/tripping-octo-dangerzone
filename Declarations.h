@@ -29,6 +29,7 @@ extern Uint8 *ArrowStates;
 
 extern SDL_Rect CursorClips[17];
 extern SDL_Rect ProjectileClips[2];
+extern SDL_Rect EnemyDownClipRect[7];
 extern SDL_Rect BottomWall;
 
 extern SDL_Surface *Background;
@@ -49,7 +50,7 @@ extern SDL_Surface *HUD;
 extern SDL_Surface *Sniper;
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
-extern SDL_Surface *EnemyClips;
+extern SDL_Surface *EnemyDownClips;
 
 extern TTF_Font *KarmaFuture;
 extern TTF_Font *EightBitLimit;
@@ -61,7 +62,8 @@ extern bool LDown;
 extern bool RDown;
 extern bool UDown;
 extern bool DDown;
-extern bool PlaySound;
+extern bool PlsPlaySound;
+extern bool LazyDebug;
 
 extern int CameraX;
 extern int CameraY;

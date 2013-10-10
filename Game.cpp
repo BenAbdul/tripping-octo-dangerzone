@@ -42,8 +42,6 @@ void Game()
 		Character.UpdatePosition();
 		PlayerX = Character.WorldxPos;
 		PlayerY = Character.WorldyPos;
-		CameraX = Viewport.CameraRect.x;
-		CameraY = Viewport.CameraRect.y;
 		int PlayerDirection = ReturnPlayerDirection(Mouse.MouseX,Mouse.MouseY);
 		switch(PlayerDirection)
 		{
@@ -83,6 +81,8 @@ void Game()
 		{
 			Viewport.CameraRect.y -= (100 - Mouse.MouseY)* 1.5;
 		}
+		CameraX = Viewport.CameraRect.x;
+		CameraY = Viewport.CameraRect.y;
 
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
 		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
@@ -162,6 +162,11 @@ void Game()
 					CreateEnemy();
 				}
 
+				if(event.key.keysym.sym == SDLK_f && Debug == true)
+				{
+					LazyDebug = true;
+				}
+
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 				{
 					Pause();
@@ -174,6 +179,7 @@ void Game()
 				if(event.key.keysym.sym == SDLK_RIGHT) RDown = false;
 				if(event.key.keysym.sym == SDLK_UP) UDown = false;
 				if(event.key.keysym.sym == SDLK_DOWN) DDown = false;
+				if(event.key.keysym.sym == SDLK_f) LazyDebug = false;
 			}
 
 			if(event.type == SDL_MOUSEBUTTONDOWN)
@@ -188,8 +194,8 @@ void Game()
 				ProjectileVector.push_back(Character.WorldyPos);
 				ProjectileVector.push_back(0);
 				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(xRatio);
-				ProjectileVector.push_back(yRatio * -1);
+				ProjectileVector.push_back(xRatio + Character.xVel);
+				ProjectileVector.push_back((yRatio * -1)+ Character.yVel);
 				ProjectileVector.push_back(1);
 				SpareStream.str("");
 				SpareStream << "Projectile created with ratio X += " << xRatio << " Y += " << yRatio << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
