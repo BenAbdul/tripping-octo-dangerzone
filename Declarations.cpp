@@ -42,6 +42,7 @@ bool LDown = false;
 bool RDown = false;
 bool UDown = false;
 bool DDown = false;
+bool MouseDown = false;
 bool PlsPlaySound = true;
 bool LazyDebug = false;
 
@@ -77,6 +78,7 @@ SDL_Surface *Message2 = NULL;
 SDL_Surface *PausedScreen = NULL;
 SDL_Surface *Window = NULL;
 SDL_Surface *U1 = NULL;
+SDL_Surface *FrontDed = NULL;
 SDL_Surface *D1 = NULL;
 SDL_Surface *L1 = NULL;
 SDL_Surface *R1 = NULL;
@@ -84,6 +86,7 @@ SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
 SDL_Surface *Sniper = NULL;
 SDL_Surface *EnemyDownClips = NULL;
+SDL_Surface *EnemyUpClips = NULL;
 
 void LoadFiles()
 {
@@ -100,10 +103,12 @@ void LoadFiles()
 	L1 = LoadImage("Resources/Images/Character/L1.png");
 	R1 = LoadImage("Resources/Images/Character/R1.png");
 	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
+	EnemyUpClips = LoadImage("Resources/Images/EnemyUpwards.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
 	HUD = LoadImage("Resources/Images/UI.png");
+	FrontDed = LoadImage("Resources/Images/TempDed.png");
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
 }
 
@@ -161,6 +166,7 @@ bool CheckFiles()
 	else if (KarmaFuture == NULL) return false;
 	else if (EightBitLimitSmall == NULL) return false;
 	else if (PausedScreen == NULL) return false;
+	else if (FrontDed == NULL) return false;
 	else if (U1 == NULL) return false;
 	else if (R1 == NULL) return false;
 	else if (D1 == NULL) return false;
@@ -170,6 +176,7 @@ bool CheckFiles()
 	else if (Projectile == NULL) return false;
 	else if (Sniper == NULL) return false;
 	else if (EnemyDownClips == NULL) return false;
+	else if (EnemyUpClips == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

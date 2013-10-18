@@ -45,12 +45,14 @@ extern SDL_Surface *D1;
 extern SDL_Surface *U1;
 extern SDL_Surface *L1;
 extern SDL_Surface *R1;
+extern SDL_Surface *FrontDed;
 extern SDL_Surface *Projectile;
 extern SDL_Surface *HUD;
 extern SDL_Surface *Sniper;
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
 extern SDL_Surface *EnemyDownClips;
+extern SDL_Surface *EnemyUpClips;
 
 extern TTF_Font *KarmaFuture;
 extern TTF_Font *EightBitLimit;
@@ -62,6 +64,7 @@ extern bool LDown;
 extern bool RDown;
 extern bool UDown;
 extern bool DDown;
+extern bool MouseDown;
 extern bool PlsPlaySound;
 extern bool LazyDebug;
 

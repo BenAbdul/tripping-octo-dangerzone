@@ -9,6 +9,7 @@ public:
 	int xVel,yVel;
 	int Frame, FrameTime;
 	int Active;
+	int Facing;
 	Enemy();
 };
 

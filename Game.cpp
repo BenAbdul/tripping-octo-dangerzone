@@ -10,6 +10,7 @@
 #include"CalculateProjectileAngle.h"
 #include"ReturnPlayerDirection.h"
 #include"Pause.h"
+#include<time.h>
 #include"DoEnemies.h"
 #include"OpenDebugWindow.h"
 #include"DoEnemyProjectiles.h"
@@ -28,16 +29,24 @@ void Game()
 	SpareStream << "At the time of declaration, Mouse.FrameTime is " << Mouse.FrameTime;
 	OpenDebugWindow(SpareStream.str());
 	Timer FPS;
+	Timer Shot;
 	Player Character;
 	Camera Viewport;
 	SDL_Surface *Weapon;
 	bool Debug = false;
 	int Temp;
+	int FrameCount = 0;
 	double xRatio, yRatio = 0;
 	PlayRandomMusic();
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
+		FrameCount++;
+		if(FrameCount == 90)
+		{
+			FrameCount = 0;
+			CreateEnemy();
+		}
 		Character.HandleEvents();
 		Character.UpdatePosition();
 		PlayerX = Character.WorldxPos;
@@ -84,6 +93,23 @@ void Game()
 		CameraX = Viewport.CameraRect.x;
 		CameraY = Viewport.CameraRect.y;
 
+		if (MouseDown == true && Shot.get_ticks() > 333)
+		{
+				ProjectileVector.push_back(Character.WorldxPos);
+				ProjectileVector.push_back(Character.WorldyPos);
+				ProjectileVector.push_back(0);
+				ProjectileVector.push_back(0);
+				int Spray = (rand () % 8 + 1) - 4;
+				if (xRatio > 0)ProjectileVector.push_back(xRatio + Spray + Character.xVel);
+				else ProjectileVector.push_back(xRatio - Spray + Character.xVel);
+				ProjectileVector.push_back((yRatio * -1)+ Character.yVel);
+				ProjectileVector.push_back(1);
+				SpareStream.str("");
+				SpareStream << "Projectile created with ratio X += " << xRatio << " Y += " << yRatio << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
+				OpenDebugWindow(SpareStream.str());
+				Shot.start();
+		}
+		if(Shot.get_ticks() > 6000) ProjectileVector.erase(ProjectileVector.begin(),ProjectileVector.end());
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
 		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
 		Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
@@ -142,6 +168,27 @@ void Game()
 				State = MENU;
 			}
 
+			if(event.type == SDL_MOUSEBUTTONDOWN) 
+			{
+				ProjectileVector.push_back(Character.WorldxPos);
+				ProjectileVector.push_back(Character.WorldyPos);
+				ProjectileVector.push_back(0);
+				ProjectileVector.push_back(0);
+				srand(time(NULL));
+				int Spray = (rand () % 8 + 1) - 4;
+				if (xRatio > 0)ProjectileVector.push_back(xRatio + Spray + Character.xVel);
+				else ProjectileVector.push_back(xRatio - Spray + Character.xVel);
+				ProjectileVector.push_back((yRatio * -1)+ Character.yVel);
+				ProjectileVector.push_back(1);
+				SpareStream.str("");
+				SpareStream << "Projectile created with ratio X += " << xRatio << " Y += " << yRatio << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
+				OpenDebugWindow(SpareStream.str());
+				
+				MouseDown = true;
+				OpenDebugWindow("Shots fired!");
+				Shot.start();
+			}
+			if(event.type == SDL_MOUSEBUTTONUP) MouseDown = false;
 			if (event.type == SDL_KEYDOWN)
 			{
 				if(event.key.keysym.sym == SDLK_LEFT) LDown = true;
@@ -182,25 +229,6 @@ void Game()
 				if(event.key.keysym.sym == SDLK_f) LazyDebug = false;
 			}
 
-			if(event.type == SDL_MOUSEBUTTONDOWN)
-			{
-				/*
-				Series for projectile vector
-			... xPos,yPos,Frame,Frametime,xRatio,yRatio,Active ... (7 variables)
-				= x										 = x+6
-				*/
-				
-				ProjectileVector.push_back(Character.WorldxPos);
-				ProjectileVector.push_back(Character.WorldyPos);
-				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(0);
-				ProjectileVector.push_back(xRatio + Character.xVel);
-				ProjectileVector.push_back((yRatio * -1)+ Character.yVel);
-				ProjectileVector.push_back(1);
-				SpareStream.str("");
-				SpareStream << "Projectile created with ratio X += " << xRatio << " Y += " << yRatio << ". The projectile was created at (" << Character.WorldxPos << "," << Character.WorldyPos << ")";
-				OpenDebugWindow(SpareStream.str());
-			}
 
 			if(event.type == SDL_MOUSEMOTION)
 			{
