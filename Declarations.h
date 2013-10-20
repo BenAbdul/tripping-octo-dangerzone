@@ -67,12 +67,13 @@ extern bool DDown;
 extern bool MouseDown;
 extern bool PlsPlaySound;
 extern bool LazyDebug;
+extern bool Ded;
 
 extern int CameraX;
 extern int CameraY;
 extern int XChange;
 extern int YChange;
-extern int EnemyID;
+extern int KillerID;
 extern int PlayerX;
 extern int PlayerY;
 

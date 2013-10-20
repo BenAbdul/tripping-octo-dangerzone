@@ -41,6 +41,15 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
+
+		if (Ded == true)
+		{
+			for(int x = 0; x < EnemyVector.size(); x++)
+			{
+				if (KillerID == EnemyVector.at(x).ID) Viewport.MoveCameraTo(EnemyVector.at(x).xPos - (ScreenWidth - 49)/2 , EnemyVector.at(x).yPos - (ScreenHeight - Character.CurrentSprite->h)/2);
+			}
+		}
+
 		FrameCount++;
 		if(FrameCount == 90)
 		{
@@ -93,7 +102,7 @@ void Game()
 		CameraX = Viewport.CameraRect.x;
 		CameraY = Viewport.CameraRect.y;
 
-		if (MouseDown == true && Shot.get_ticks() > 333)
+		if (MouseDown == true && Shot.get_ticks() > 200)
 		{
 				ProjectileVector.push_back(Character.WorldxPos);
 				ProjectileVector.push_back(Character.WorldyPos);
@@ -118,7 +127,7 @@ void Game()
 		DoEnemies();
 		DoEnemyProjectiles();
 		ApplySurface(0,500 - HUD->h,HUD,Screen);
-		if(Debug == true)
+		if(Debug = true)
 		{
 			std::stringstream DebugStream;
 			DebugStream.str("");
@@ -157,6 +166,13 @@ void Game()
 			if(DDown == true) DebugStream << " Down ";
 			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
 			ApplySurface(0,175,Message2,Screen);
+			if (Ded == true)
+			{
+			DebugStream.str("");
+			DebugStream << "Ded";
+			Message2 = TTF_RenderText_Solid(EightBitLimitSmall,DebugStream.str().c_str(),White);
+			ApplySurface(0,200,Message2,Screen);
+			}
 		}
 		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character.CurrentSprite->w)/2 , Character.WorldyPos - (ScreenHeight - Character.CurrentSprite->h)/2);
 		SDL_Flip(Screen);

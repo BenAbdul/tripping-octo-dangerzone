@@ -32,7 +32,7 @@ int CameraX = 0;
 int CameraY = 0;
 int XChange = 0;
 int YChange = 0;
-int EnemyID = 0;
+int KillerID = 0;
 int PlayerX, PlayerY = 0;
 
 SDL_Event event;
@@ -42,6 +42,7 @@ bool LDown = false;
 bool RDown = false;
 bool UDown = false;
 bool DDown = false;
+bool Ded = false;
 bool MouseDown = false;
 bool PlsPlaySound = true;
 bool LazyDebug = false;

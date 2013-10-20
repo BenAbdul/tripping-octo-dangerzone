@@ -5,14 +5,16 @@
 extern class Enemy
 {
 public:
-	int xPos, yPos;
-	int xVel,yVel;
+	float xPos, yPos;
+	float xVel,yVel;
 	int Frame, FrameTime;
 	int Active;
 	int Facing;
+	int ID;
 	Enemy();
 };
 
+extern std::vector<Enemy> EnemyVector;
 extern void CreateEnemy();
 extern void DoEnemies();
 

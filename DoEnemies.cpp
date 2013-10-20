@@ -1,15 +1,18 @@
 #include"DoEnemies.h"
 #include<time.h>
 #include"Declarations.h"
+#include"Game.h"
 
 bool LazyFlag = false;
 
+int CurrentID = 0;
 Enemy::Enemy()
 {
 	srand(time(NULL));
 	xPos = 0;
 	yPos = 0;
-
+	CurrentID++;
+	ID = CurrentID;
 	do
 	{
 		xPos = rand () % 4900 + 100;
@@ -56,6 +59,16 @@ void DoEnemies()
 		{
 			if(CURRENTCLASS.Active == 1)
 			{
+				if (PlayerX > CURRENTCLASS.xPos && PlayerX < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
+				{
+					Ded = true;
+					KillerID = CURRENTCLASS.ID;
+				}
+				else if (PlayerX + 27 > CURRENTCLASS.xPos && PlayerX + 27 < CURRENTCLASS.xPos + 49 && PlayerY + 25 > CURRENTCLASS.yPos && PlayerY + 25 < CURRENTCLASS.yPos + 25) 	
+				{
+					Ded = true;
+					KillerID = CURRENTCLASS.ID;
+				}
 				if (ProjectileVector.size() > 1)
 				{
 					for(int y = 0; y <= ProjectileVector.size() - 7; y += 7)
@@ -67,14 +80,50 @@ void DoEnemies()
 								CURRENTCLASS.Active = 0;
 								ACTIVE = 0;
 							}
+
+							else if (XPOS + 11 > CURRENTCLASS.xPos && XPOS + 11 < CURRENTCLASS.xPos + 25 && YPOS + 11 > CURRENTCLASS.yPos && YPOS+11 < CURRENTCLASS.yPos + 49)
+							{
+								CURRENTCLASS.Active = 0;
+								ACTIVE = 0;
+							}
 						}
 					}
 				}
+				if(Ded == false)
+				{
+					if (CURRENTCLASS.xPos > PlayerX && CURRENTCLASS.xVel >= -5) CURRENTCLASS.xVel-=2;
+					else if (CURRENTCLASS.xPos < PlayerX && CURRENTCLASS.xVel <= 5) CURRENTCLASS.xVel+=2;
+					if (CURRENTCLASS.yPos > PlayerY && CURRENTCLASS.yVel >=-5) {CURRENTCLASS.yVel-=2; CURRENTCLASS.Facing = 0;}
+					else if (CURRENTCLASS.yPos < PlayerY && CURRENTCLASS.yVel <= 5) {CURRENTCLASS.yVel+=2; CURRENTCLASS.Facing = 1;}
+				}
+				else
+				{
+
+					if (CURRENTCLASS.xVel > 0)
+					{
+						if(CURRENTCLASS.xVel - 0.05 < 0) CURRENTCLASS.xVel = 0;
+						else CURRENTCLASS.xVel-=0.05;
+					}
+					
+					else if (CURRENTCLASS.xVel < 0)
+					{
+						if(CURRENTCLASS.xVel + 0.05 > 0) CURRENTCLASS.xVel = 0;
+						else CURRENTCLASS.xVel += 0.05;
+					}
+
+					if (CURRENTCLASS.yVel > 0)
+					{
+						if(CURRENTCLASS.yVel - 0.05 < 0) CURRENTCLASS.yVel = 0;
+						else CURRENTCLASS.yVel -= 0.05;
+					}
 				
-				if (CURRENTCLASS.xPos > PlayerX && CURRENTCLASS.xVel >= -1) CURRENTCLASS.xVel--;
-				else if (CURRENTCLASS.xPos < PlayerX && CURRENTCLASS.xVel <= 1) CURRENTCLASS.xVel++;
-				if (CURRENTCLASS.yPos > PlayerY && CURRENTCLASS.yVel >=-1) {CURRENTCLASS.yVel--; CURRENTCLASS.Facing = 0;}
-				else if (CURRENTCLASS.yPos < PlayerY && CURRENTCLASS.yVel <= 1) {CURRENTCLASS.yVel++; CURRENTCLASS.Facing = 1;}
+					else if (CURRENTCLASS.yVel < 0)
+					{
+						if(CURRENTCLASS.yVel + 0.05 > 0) CURRENTCLASS.yVel = 0;
+						else CURRENTCLASS.yVel += 0.05;
+					}
+				}
+
 				CURRENTCLASS.xPos += CURRENTCLASS.xVel;
 				CURRENTCLASS.yPos += CURRENTCLASS.yVel;
 				CURRENTCLASS.FrameTime++;
@@ -89,7 +138,32 @@ void DoEnemies()
 			}
 			else
 			{
+				CURRENTCLASS.xPos += CURRENTCLASS.xVel;
+				CURRENTCLASS.yPos += CURRENTCLASS.yVel;
 				ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,FrontDed,Screen);
+				if (CURRENTCLASS.xVel > 0)
+				{
+					if(CURRENTCLASS.xVel - 0.1 < 0) CURRENTCLASS.xVel = 0;
+					else CURRENTCLASS.xVel-=0.1;
+				}
+				
+				else if (CURRENTCLASS.xVel < 0)
+				{
+					if(CURRENTCLASS.xVel + 0.1 > 0) CURRENTCLASS.xVel = 0;
+					else CURRENTCLASS.xVel += 0.1;
+				}
+
+				if (CURRENTCLASS.yVel > 0)
+				{
+					if(CURRENTCLASS.yVel - 0.1 < 0) CURRENTCLASS.yVel = 0;
+					else CURRENTCLASS.yVel -= 0.1;
+				}
+				
+				else if (CURRENTCLASS.yVel < 0)
+				{
+					if(CURRENTCLASS.yVel + 0.1 > 0) CURRENTCLASS.yVel = 0;
+					else CURRENTCLASS.yVel += 0.1;
+				}
 			}
 		}
 	}
