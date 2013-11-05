@@ -40,6 +40,9 @@ extern SDL_Surface *CursorSheet;
 extern SDL_Surface *PausedScreen;
 extern SDL_Surface *RShadow;
 extern SDL_Surface *LShadow;
+extern SDL_Surface *EnemuIndicator;
+extern SDL_Surface *YouDied;
+extern SDL_Surface *YouAreShit;
 extern SDL_Surface *Shadow;
 extern SDL_Surface *D1;
 extern SDL_Surface *U1;
@@ -53,6 +56,7 @@ extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
 extern SDL_Surface *EnemyDownClips;
 extern SDL_Surface *EnemyUpClips;
+extern SDL_Surface *KillsImg;
 
 extern TTF_Font *KarmaFuture;
 extern TTF_Font *EightBitLimit;
@@ -74,6 +78,7 @@ extern int CameraY;
 extern int XChange;
 extern int YChange;
 extern int KillerID;
+extern int Kills;
 extern int PlayerX;
 extern int PlayerY;
 

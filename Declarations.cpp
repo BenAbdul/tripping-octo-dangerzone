@@ -32,6 +32,7 @@ int CameraX = 0;
 int CameraY = 0;
 int XChange = 0;
 int YChange = 0;
+int Kills = 0;
 int KillerID = 0;
 int PlayerX, PlayerY = 0;
 
@@ -71,6 +72,8 @@ SDL_Surface *CursorSheet = NULL;
 SDL_Surface *RShadow = NULL;
 SDL_Surface *LShadow = NULL;
 SDL_Surface *Shadow = NULL;
+SDL_Surface *YouDied = NULL;
+SDL_Surface *YouAreShit = NULL;
 TTF_Font *EightBitLimit = NULL;
 TTF_Font *KarmaFuture = NULL;
 TTF_Font *EightBitLimitSmall = NULL;
@@ -85,7 +88,9 @@ SDL_Surface *L1 = NULL;
 SDL_Surface *R1 = NULL;
 SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
+SDL_Surface *KillsImg = NULL;
 SDL_Surface *Sniper = NULL;
+SDL_Surface *EnemuIndicator = NULL;
 SDL_Surface *EnemyDownClips = NULL;
 SDL_Surface *EnemyUpClips = NULL;
 
@@ -94,6 +99,7 @@ void LoadFiles()
 	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
 	Background = LoadImage("Resources/Images/Background.png");
 	MenuBackground = LoadImage("Resources/Images/MenuBackground.png");
+	EnemuIndicator = LoadImage("Resources/Images/Rapist.png");
 	CursorSheet = LoadImage("Resources/Images/Cursor.png");
 	PausedScreen = LoadImage("Resources/Images/PauseScreen.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
@@ -106,11 +112,14 @@ void LoadFiles()
 	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
 	EnemyUpClips = LoadImage("Resources/Images/EnemyUpwards.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
+	YouDied = LoadImage("Resources/Images/YouDied.png");
+	YouAreShit = LoadImage("Resources/Images/YouAreShit.png");
 	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
 	HUD = LoadImage("Resources/Images/UI.png");
 	FrontDed = LoadImage("Resources/Images/TempDed.png");
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
+	KillsImg = LoadImage("Resources/Images/Kills.png");
 }
 
 bool SetClips()
@@ -172,8 +181,11 @@ bool CheckFiles()
 	else if (R1 == NULL) return false;
 	else if (D1 == NULL) return false;
 	else if (L1 == NULL) return false;
+	else if (KillsImg == NULL) return false;
 	else if (RShadow == NULL) return false;
 	else if (LShadow == NULL) return false;
+	else if (YouDied == NULL) return false;
+	else if (YouAreShit == NULL) return false;
 	else if (Projectile == NULL) return false;
 	else if (Sniper == NULL) return false;
 	else if (EnemyDownClips == NULL) return false;

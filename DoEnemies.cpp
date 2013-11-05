@@ -13,16 +13,14 @@ Enemy::Enemy()
 	yPos = 0;
 	CurrentID++;
 	ID = CurrentID;
-	do
-	{
-		xPos = rand () % 4900 + 100;
-		if (xPos < CameraX || xPos > CameraX + 500) LazyFlag = true;
+	do {
+		xPos = rand () % (CameraX + 1000) + (CameraX - 150);
+		if (xPos < CameraX || xPos > CameraX + 800) LazyFlag = true;
 	} while (LazyFlag == false);
 	LazyFlag = false;
 
-	do
-	{
-		yPos = rand () % 4900 + 100;
+	do {
+		yPos = rand () % (CameraY + 700) + (CameraY - 150);
 		if (yPos < CameraY || yPos > CameraY + 500) LazyFlag = true;
 	} while(LazyFlag == false);
 
@@ -57,6 +55,10 @@ void DoEnemies()
 	{
 		for(int x = 0; x < EnemyVector.size(); x++)
 		{
+			if (CURRENTCLASS.yPos < 500) {CURRENTCLASS.yPos = 500; CURRENTCLASS.yVel = 0;}
+			else if (CURRENTCLASS.yPos + 36 > 5500) {CURRENTCLASS.yPos = 5500 - 36; CURRENTCLASS.yVel = 0;}
+			if (CURRENTCLASS.xPos < 500) {CURRENTCLASS.xPos = 500; CURRENTCLASS.xVel = x;}
+			else if (CURRENTCLASS.xPos + 49 > 5500) {CURRENTCLASS.xPos = 5500 - 49; CURRENTCLASS.xVel = 0;}
 			if(CURRENTCLASS.Active == 1)
 			{
 				if (PlayerX > CURRENTCLASS.xPos && PlayerX < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
@@ -79,12 +81,14 @@ void DoEnemies()
 							{
 								CURRENTCLASS.Active = 0;
 								ACTIVE = 0;
+								Kills++;
 							}
 
 							else if (XPOS + 11 > CURRENTCLASS.xPos && XPOS + 11 < CURRENTCLASS.xPos + 25 && YPOS + 11 > CURRENTCLASS.yPos && YPOS+11 < CURRENTCLASS.yPos + 49)
 							{
 								CURRENTCLASS.Active = 0;
 								ACTIVE = 0;
+								Kills++;
 							}
 						}
 					}
@@ -133,8 +137,23 @@ void DoEnemies()
 					CURRENTCLASS.Frame++;
 					if (CURRENTCLASS.Frame == 7) CURRENTCLASS.Frame = 0;
 				}
-				if (CURRENTCLASS.Facing == 1) ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyDownClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
-				else ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyUpClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
+
+				if (CURRENTCLASS.xPos + 49 > CameraX && CURRENTCLASS.xPos  < CameraX + 800 && CURRENTCLASS.yPos > CameraY && CURRENTCLASS.yPos < CameraY + 500)
+				{
+					if (CURRENTCLASS.Facing == 1) ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyDownClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
+					else ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyUpClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
+				}
+				else if (Ded == false)
+				{
+					if(CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos < CameraY) ApplySurface(0,0,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(0,ScreenHeight - EnemuIndicator->h,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenHeight && CURRENTCLASS.yPos < CameraY) ApplySurface(ScreenWidth - EnemuIndicator->h,0,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenHeight && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(ScreenWidth - EnemuIndicator->h,ScreenHeight - EnemuIndicator->h,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.xPos + 49 < CameraX) ApplySurface(0,CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.xPos > CameraX + ScreenWidth) ApplySurface(ScreenWidth - EnemuIndicator->w, CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(CURRENTCLASS.xPos - CameraX,ScreenHeight - EnemuIndicator->h,EnemuIndicator,Screen);
+					else if (CURRENTCLASS.yPos < CameraY) ApplySurface(CURRENTCLASS.xPos - CameraX,0,EnemuIndicator,Screen);
+				}
 			}
 			else
 			{
