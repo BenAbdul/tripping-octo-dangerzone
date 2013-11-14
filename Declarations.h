@@ -81,6 +81,7 @@ extern int KillerID;
 extern int Kills;
 extern int PlayerX;
 extern int PlayerY;
+extern int Lives;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;

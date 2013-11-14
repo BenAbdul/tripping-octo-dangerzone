@@ -35,6 +35,7 @@ int YChange = 0;
 int Kills = 0;
 int KillerID = 0;
 int PlayerX, PlayerY = 0;
+int Lives = 3;
 
 SDL_Event event;
 

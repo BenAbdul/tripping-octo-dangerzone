@@ -61,48 +61,102 @@ void DoEnemies()
 			else if (CURRENTCLASS.xPos + 49 > 5500) {CURRENTCLASS.xPos = 5500 - 49; CURRENTCLASS.xVel = 0;}
 			if(CURRENTCLASS.Active == 1)
 			{
-				if (PlayerX > CURRENTCLASS.xPos && PlayerX < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
+				if(Ded == false)
 				{
-					Ded = true;
-					KillerID = CURRENTCLASS.ID;
-				}
-				else if (PlayerX + 27 > CURRENTCLASS.xPos && PlayerX + 27 < CURRENTCLASS.xPos + 49 && PlayerY + 25 > CURRENTCLASS.yPos && PlayerY + 25 < CURRENTCLASS.yPos + 25) 	
-				{
-					Ded = true;
-					KillerID = CURRENTCLASS.ID;
-				}
-				if (ProjectileVector.size() > 1)
-				{
-					for(int y = 0; y <= ProjectileVector.size() - 7; y += 7)
+					if (PlayerX > CURRENTCLASS.xPos && PlayerX < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
 					{
-						if (ACTIVE == 1)
+						Lives--;
+						if (Lives == -1)
 						{
-							if (XPOS > CURRENTCLASS.xPos && XPOS < CURRENTCLASS.xPos + 25 && YPOS > CURRENTCLASS.yPos && YPOS < CURRENTCLASS.yPos + 49)
+							Ded = true;
+							KillerID = CURRENTCLASS.ID;
+						}
+					}
+					else if (PlayerX + 27 > CURRENTCLASS.xPos && PlayerX + 27 < CURRENTCLASS.xPos + 49 && PlayerY + 25 > CURRENTCLASS.yPos && PlayerY + 25 < CURRENTCLASS.yPos + 25) 	
+					{
+						Lives--;
+						if (Lives == -1)
+						{
+							Ded = true;
+							KillerID = CURRENTCLASS.ID;
+						}
+					}
+					if (ProjectileVector.size() > 1)
+					{
+						for(int y = 0; y <= ProjectileVector.size() - 7; y += 7)
+						{
+							if (ACTIVE == 1)
 							{
-								CURRENTCLASS.Active = 0;
-								ACTIVE = 0;
-								Kills++;
-							}
+								if (XPOS > CURRENTCLASS.xPos && XPOS < CURRENTCLASS.xPos + 25 && YPOS > CURRENTCLASS.yPos && YPOS < CURRENTCLASS.yPos + 49)
+								{
+									CURRENTCLASS.Active = 0;
+									ACTIVE = 0;
+									Kills++;
+								}
 
-							else if (XPOS + 11 > CURRENTCLASS.xPos && XPOS + 11 < CURRENTCLASS.xPos + 25 && YPOS + 11 > CURRENTCLASS.yPos && YPOS+11 < CURRENTCLASS.yPos + 49)
-							{
-								CURRENTCLASS.Active = 0;
-								ACTIVE = 0;
-								Kills++;
+								else if (XPOS + 11 > CURRENTCLASS.xPos && XPOS + 11 < CURRENTCLASS.xPos + 25 && YPOS + 11 > CURRENTCLASS.yPos && YPOS+11 < CURRENTCLASS.yPos + 49)
+								{
+									CURRENTCLASS.Active = 0;
+									ACTIVE = 0;
+									Kills++;
+								}
 							}
 						}
 					}
+
+					double DeltaX, DeltaY;
+					double Distance;
+					
+					if (CURRENTCLASS.xPos > PlayerX - 10 && CURRENTCLASS.xPos < PlayerX + 10)
+					{
+						if (CURRENTCLASS.yPos > PlayerY) CURRENTCLASS.yVel--;
+						else CURRENTCLASS.yVel++;
+					}
+
+					else if (PlayerX < CURRENTCLASS.xPos &&  PlayerY < CURRENTCLASS.yPos) //Top left
+					{
+						int poo = CURRENTCLASS.xPos;
+						int wee = CURRENTCLASS.yPos;
+
+						DeltaX = CURRENTCLASS.xPos - PlayerX;
+						DeltaY = CURRENTCLASS.yPos - PlayerY;
+						Distance = sqrt(DeltaX + DeltaY);
+						CURRENTCLASS.xVel = (DeltaX / Distance) * -1;
+						CURRENTCLASS.yVel = DeltaY / Distance;//) * -1;
+						int anus = CURRENTCLASS.yVel;
+					}
+
+					else if (PlayerX > CURRENTCLASS.xPos &&  PlayerY < CURRENTCLASS.yPos) //Top right
+					{
+						DeltaX = PlayerX - CURRENTCLASS.xPos;
+						DeltaY = CURRENTCLASS.yPos - PlayerY;
+						Distance = sqrt(DeltaX + DeltaY);
+						CURRENTCLASS.xVel = DeltaX / Distance;
+						CURRENTCLASS.yVel = DeltaY / Distance;
+					}
+	
+					else if (PlayerX < CURRENTCLASS.xPos &&  PlayerY > CURRENTCLASS.yPos) //Bottom left
+					{
+						DeltaX = CURRENTCLASS.xPos - PlayerX;
+						DeltaY = PlayerY - CURRENTCLASS.yPos;
+						Distance = sqrt(DeltaX + DeltaY);
+						CURRENTCLASS.xVel = (DeltaX / Distance) * -1;
+						CURRENTCLASS.yVel = (DeltaY / Distance) * -1;
+					}
+	
+					else if (PlayerX > CURRENTCLASS.xPos &&  PlayerY > CURRENTCLASS.yPos) //Bottom right
+					{
+						DeltaX = PlayerX - CURRENTCLASS.xPos;
+						DeltaY = PlayerY - CURRENTCLASS.yPos;
+						Distance = sqrt(DeltaX + DeltaY);
+						CURRENTCLASS.xVel = DeltaX / Distance;
+						CURRENTCLASS.yVel = DeltaY / Distance;
+					}
+					CURRENTCLASS.yVel = (CURRENTCLASS.yVel * -1) / 2;
 				}
-				if(Ded == false)
-				{
-					if (CURRENTCLASS.xPos > PlayerX && CURRENTCLASS.xVel >= -5) CURRENTCLASS.xVel-=2;
-					else if (CURRENTCLASS.xPos < PlayerX && CURRENTCLASS.xVel <= 5) CURRENTCLASS.xVel+=2;
-					if (CURRENTCLASS.yPos > PlayerY && CURRENTCLASS.yVel >=-5) {CURRENTCLASS.yVel-=2; CURRENTCLASS.Facing = 0;}
-					else if (CURRENTCLASS.yPos < PlayerY && CURRENTCLASS.yVel <= 5) {CURRENTCLASS.yVel+=2; CURRENTCLASS.Facing = 1;}
-				}
+
 				else
 				{
-
 					if (CURRENTCLASS.xVel > 0)
 					{
 						if(CURRENTCLASS.xVel - 0.05 < 0) CURRENTCLASS.xVel = 0;

@@ -37,6 +37,7 @@ void Game()
 	bool Debug = true;
 	int Temp;
 	int FrameCount = 0;
+	int EnemySpawnTimer = 120;
 	double xRatio, yRatio = 0;
 	bool ClickDone = false;
 	bool PieceOfPoo = false;
@@ -54,7 +55,6 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
-
 		if (Ded == true)
 		{
 			if (YouDiedProgress < 90) YouDiedProgress ++;
@@ -67,9 +67,10 @@ void Game()
 		}
 
 		FrameCount++;
-		if(FrameCount == 40)
+		if(FrameCount == EnemySpawnTimer)
 		{
 			FrameCount = 0;
+			if (EnemySpawnTimer > 30) EnemySpawnTimer-=2;
 			CreateEnemy();
 		}
 		Character.HandleEvents();
