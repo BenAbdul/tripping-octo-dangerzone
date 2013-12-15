@@ -6,7 +6,7 @@ Player::Player()
 {
 	Lives = 3;
 	Ammo = 0;
-	CurrentSelection = 1; //Melee
+	CurrentSelection = 1; //LolNo
 	xVel = 0;
 	yVel = 0;
 	WorldxPos = 100;

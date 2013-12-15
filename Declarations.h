@@ -30,6 +30,7 @@ extern Uint8 *ArrowStates;
 extern SDL_Rect CursorClips[17];
 extern SDL_Rect ProjectileClips[2];
 extern SDL_Rect EnemyDownClipRect[7];
+SDL_Rect IndicatorClips[];
 extern SDL_Rect BottomWall;
 
 extern SDL_Surface *Background;
@@ -46,6 +47,7 @@ extern SDL_Surface *YouAreShit;
 extern SDL_Surface *Shadow;
 extern SDL_Surface *D1;
 extern SDL_Surface *U1;
+extern SDL_Surface *LivesIcon;
 extern SDL_Surface *L1;
 extern SDL_Surface *R1;
 extern SDL_Surface *FrontDed;
@@ -72,6 +74,7 @@ extern bool MouseDown;
 extern bool PlsPlaySound;
 extern bool LazyDebug;
 extern bool Ded;
+extern bool ShallIRenderHim;
 
 extern int CameraX;
 extern int CameraY;
@@ -82,6 +85,7 @@ extern int Kills;
 extern int PlayerX;
 extern int PlayerY;
 extern int Lives;
+extern int Mag, Dur;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;
@@ -91,6 +95,7 @@ bool Init();
 void LoadFiles();
 bool SetClips();
 bool CheckFiles();
+void CheckShake();
 void ApplySurface( int x, int y, SDL_Surface* Source, SDL_Surface* Destination, SDL_Rect* Clip = NULL );
 
 #endif

@@ -1,10 +1,12 @@
 #include"Declarations.h"
 #include"Menu.h"
 #include"Game.h"
+#include<time.h>
 
 int main (int argc, char* argv [])
 {
 	if (Init() == false) return -1;
+	srand(time(NULL));
 	OpenDebugWindow("Loading files");
 	LoadFiles();
 	if (CheckFiles() == false) return -1;

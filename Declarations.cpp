@@ -1,19 +1,6 @@
 #include"Declarations.h"
 #include "OpenDebugWindow.h"
 
-bool Init()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
-	if(TTF_Init() == -1) return false;
-	WasItInit = TTF_WasInit();
-	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
-	if (Screen == NULL) return false;
-    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) return false;
-    SDL_WM_SetCaption("Tripping Octo Dangerzone", NULL);
-    SDL_EnableUNICODE(SDL_ENABLE);
-    return true;
-}
-
 SDL_Surface *LoadImage( std::string filename )
 {
     OpenDebugWindow(filename);
@@ -48,6 +35,7 @@ bool Ded = false;
 bool MouseDown = false;
 bool PlsPlaySound = true;
 bool LazyDebug = false;
+bool ShallIRenderHim = true;
 
 std::stringstream SpareStream;
 
@@ -65,6 +53,7 @@ Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 SDL_Rect CursorClips[17];
 SDL_Rect ProjectileClips[2];
 SDL_Rect EnemyDownClipRect[7];
+SDL_Rect IndicatorClips[8];
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
@@ -79,6 +68,7 @@ TTF_Font *EightBitLimit = NULL;
 TTF_Font *KarmaFuture = NULL;
 TTF_Font *EightBitLimitSmall = NULL;
 SDL_Surface *Message1 = NULL;
+SDL_Surface *LivesIcon = NULL;
 SDL_Surface *Message2 = NULL;
 SDL_Surface *PausedScreen = NULL;
 SDL_Surface *Window = NULL;
@@ -100,7 +90,7 @@ void LoadFiles()
 	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
 	Background = LoadImage("Resources/Images/Background.png");
 	MenuBackground = LoadImage("Resources/Images/MenuBackground.png");
-	EnemuIndicator = LoadImage("Resources/Images/Rapist.png");
+	EnemuIndicator = LoadImage("Resources/Images/Indicators.png");
 	CursorSheet = LoadImage("Resources/Images/Cursor.png");
 	PausedScreen = LoadImage("Resources/Images/PauseScreen.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
@@ -110,6 +100,7 @@ void LoadFiles()
 	D1 = LoadImage("Resources/Images/Character/D1.png");
 	L1 = LoadImage("Resources/Images/Character/L1.png");
 	R1 = LoadImage("Resources/Images/Character/R1.png");
+	LivesIcon = LoadImage("Resources/Images/Life.png");
 	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
 	EnemyUpClips = LoadImage("Resources/Images/EnemyUpwards.png");
 	RShadow = LoadImage("Resources/Images/50shadow.png");
@@ -122,6 +113,8 @@ void LoadFiles()
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
 	KillsImg = LoadImage("Resources/Images/Kills.png");
 }
+
+int Dur, Mag;
 
 bool SetClips()
 {
@@ -144,6 +137,14 @@ bool SetClips()
 		EnemyDownClipRect[x].w = 49;
 		EnemyDownClipRect[x].h = 36;
 	}
+
+	for(int x = 0; x < 9; x++)
+	{
+		IndicatorClips[x].x = (x * 50);
+		IndicatorClips[x].y = 0;
+		IndicatorClips[x].w = 50;
+		IndicatorClips[x].h = 50;
+	}
 	
 	ProjectileClips[0].h = 11;
 	ProjectileClips[0].w = 11;
@@ -159,12 +160,50 @@ bool SetClips()
 	return true;
 }
 
+void CheckShake()
+{
+	if (Dur > 0)
+	{
+		Dur--;
+		if (Dur > 10 && Dur < 20) ShallIRenderHim = false;
+		else if (Dur > 30 && Dur < 40) ShallIRenderHim = false;
+		else if (Dur > 50 && Dur < 60) ShallIRenderHim = false;
+		else if (Dur > 70 && Dur < 80) ShallIRenderHim = false;
+		else if (Dur > 90 && Dur < 100) ShallIRenderHim = false;
+		else if (Dur > 110 && Dur < 120) ShallIRenderHim = false;
+		else ShallIRenderHim = true; 
+		XChange = rand () % Mag + ((Mag/2)* -1);
+		YChange = rand () % Mag + ((Mag/2) * -1);
+		if (Dur == 0)
+		{
+			XChange = 0;
+			YChange = 0;
+		}
+	}
+}
 void ApplySurface( int x, int y, SDL_Surface* Source, SDL_Surface* Destination, SDL_Rect* Clip)
 {
     SDL_Rect offset;
-	offset.x = x + XChange;
-    offset.y = y + YChange;
+	offset.x = x;
+    offset.y = y;
+	if (XChange != 0) __debugbreak();
     SDL_BlitSurface( Source, Clip, Destination, &offset );
+}
+
+bool Init()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) return false;
+	if(TTF_Init() == -1) return false;
+	WasItInit = TTF_WasInit();
+	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
+	if (Screen == NULL) return false;
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) return false;
+    SDL_WM_SetCaption("Tripping Octo Dangerzone", NULL);
+    SDL_EnableUNICODE(SDL_ENABLE);
+    return true;
+
+	XChange = 0;
+	YChange = 0;
 }
 
 bool CheckFiles()
@@ -186,11 +225,13 @@ bool CheckFiles()
 	else if (RShadow == NULL) return false;
 	else if (LShadow == NULL) return false;
 	else if (YouDied == NULL) return false;
+	else if (LivesIcon == NULL) return false;
 	else if (YouAreShit == NULL) return false;
 	else if (Projectile == NULL) return false;
 	else if (Sniper == NULL) return false;
 	else if (EnemyDownClips == NULL) return false;
 	else if (EnemyUpClips == NULL) return false;
+	else if (EnemuIndicator == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 }

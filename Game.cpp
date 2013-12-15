@@ -21,6 +21,8 @@
 #include<windows.h>
 #include<sstream>
 
+Player Character;
+
 void Game()
 {
 	SDL_WM_GrabInput( SDL_GRAB_ON );
@@ -34,10 +36,11 @@ void Game()
 	Player Character;
 	Camera Viewport;
 	SDL_Surface *Weapon;
+	SDL_Surface *Message;
 	bool Debug = true;
 	int Temp;
 	int FrameCount = 0;
-	int EnemySpawnTimer = 120;
+	int EnemySpawnTimer = 1;
 	double xRatio, yRatio = 0;
 	bool ClickDone = false;
 	bool PieceOfPoo = false;
@@ -55,6 +58,8 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
+		CheckShake();
+
 		if (Ded == true)
 		{
 			if (YouDiedProgress < 90) YouDiedProgress ++;
@@ -67,12 +72,13 @@ void Game()
 		}
 
 		FrameCount++;
-		if(FrameCount == EnemySpawnTimer)
+		if(FrameCount == 200)
 		{
 			FrameCount = 0;
-			if (EnemySpawnTimer > 30) EnemySpawnTimer-=2;
-			CreateEnemy();
+			for (int x = EnemySpawnTimer; x >= 0; x--) CreateEnemy();
+			EnemySpawnTimer++;
 		}
+
 		Character.HandleEvents();
 		Character.UpdatePosition();
 		PlayerX = Character.WorldxPos;
@@ -141,17 +147,20 @@ void Game()
 				OpenDebugWindow(SpareStream.str());
 				Shot.start();
 		}
+
 		if(Shot.get_ticks() > 6000) ProjectileVector.erase(ProjectileVector.begin(),ProjectileVector.end());
 		ApplySurface(0,0,Background,Screen,&Viewport.CameraRect);
-		ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
+		if (ShallIRenderHim == true) ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
 		Mouse.Render();
 		DoEnemies();
 		DoEnemyProjectiles();
+
 		if (Ded == false)
 		{
 			Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
 			ApplySurface((Character.WorldxPos - Viewport.CameraRect.x) - 50,(Character.WorldyPos - Viewport.CameraRect.y) - 50,Weapon,Screen);
 		}
+
 		else
 		{
 			Debug = false;
@@ -164,22 +173,34 @@ void Game()
 			LAYZX2 -= x;
 			ApplySurface(LAYZX2,150,YouAreShit,Screen);
 		}
+
 		if (YouAreShitProgress == 91)
+		{
+			YouAreShitProgress--;
+			if(ClickDone == false)
 			{
-				YouAreShitProgress--;
-				if(ClickDone == false)
-				{
-					if (Kills < 5) Mix_PlayChannel(-1,Click,0);
-					else if (Kills < 30) Mix_PlayChannel(-1,Pistol,0);
-					else if (Kills < 60) Mix_PlayChannel(-1,Machinegun,0);
-					else if (Kills < 100) Mix_PlayChannel(-1,Minigun,0);
-					ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen);
-					ClickDone = true;
-					PieceOfPoo = true;
-				}
+				if (Kills < 5) Mix_PlayChannel(-1,Click,0);
+				else if (Kills < 50) Mix_PlayChannel(-1,Pistol,0);
+				else if (Kills < 100) Mix_PlayChannel(-1,Machinegun,0);
+				else if (Kills < 200) Mix_PlayChannel(-1,Minigun,0);
+				ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen);
+				SpareStream.str("");
+				SpareStream << Kills;
+				Message = TTF_RenderText_Solid(KarmaFuture,SpareStream.str().c_str(),White);
+				ApplySurface((ScreenWidth - KillsImg->w / 2) + 10, 260, Message, Screen);
+				ClickDone = true;
+				PieceOfPoo = true;
 			}
-		if (PieceOfPoo == true) ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen);
+		}
+
+		if (PieceOfPoo == true) ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen); //Whats this?
 		ApplySurface(0,500 - HUD->h,HUD,Screen);
+		int tni = 0;
+		for (tni = 0; tni <= Lives; tni++) 
+		{
+			//__debugbreak();
+			ApplySurface(56 + (45 * tni),(500 - HUD->h) + 20,LivesIcon,Screen);
+		}
 		if(Debug == true)
 		{
 			std::stringstream DebugStream;
