@@ -4,19 +4,18 @@
 
 Player::Player()
 {
-	Lives = 3;
 	Ammo = 0;
-	CurrentSelection = 1; //LolNo
 	xVel = 0;
 	yVel = 0;
-	WorldxPos = 100;
-	WorldyPos = 100;
+	WorldxPos = 2000;
+	WorldyPos = 2000;
 	CurrentSprite = D1;
 
 }
 
 void Player::HandleEvents()
 {
+	if (CurrentSprite == NULL) CurrentSprite = D1;
 	if (LDown == true)
 	{
 		if (xVel - 1 < -20) xVel = -20;

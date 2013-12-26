@@ -11,12 +11,14 @@
 #include "SDL_mixer.h"
 #include "SDL_rotozoom.h"
 #include "OpenDebugWindow.h"
+#include "EnemyClass.h"
 
 extern SDL_Event event;
 
 extern std::stringstream SpareStream;
 
 extern std::vector <double> ProjectileVector;
+extern std::vector<Enemy> EnemyVector;
 
 extern const int ScreenWidth;
 extern const int ScreenHeight;
@@ -39,21 +41,22 @@ extern SDL_Surface *Screen;
 extern SDL_Surface *Window;
 extern SDL_Surface *CursorSheet;
 extern SDL_Surface *PausedScreen;
-extern SDL_Surface *RShadow;
-extern SDL_Surface *LShadow;
 extern SDL_Surface *EnemuIndicator;
 extern SDL_Surface *YouDied;
 extern SDL_Surface *YouAreShit;
-extern SDL_Surface *Shadow;
 extern SDL_Surface *D1;
 extern SDL_Surface *U1;
 extern SDL_Surface *LivesIcon;
+extern SDL_Surface *Background2;
 extern SDL_Surface *L1;
 extern SDL_Surface *R1;
 extern SDL_Surface *FrontDed;
 extern SDL_Surface *Projectile;
 extern SDL_Surface *HUD;
 extern SDL_Surface *Sniper;
+extern SDL_Surface *BigGrid;
+extern SDL_Surface *SmallGrid;
+extern SDL_Surface *SniperFlipped;
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
 extern SDL_Surface *EnemyDownClips;
@@ -62,18 +65,21 @@ extern SDL_Surface *KillsImg;
 
 extern TTF_Font *KarmaFuture;
 extern TTF_Font *EightBitLimit;
+extern TTF_Font *EightBitLimitBig;
 extern TTF_Font *EightBitLimitSmall;
 
 extern bool Quit;
 extern bool WasItInit;
 extern bool LDown;
 extern bool RDown;
+extern bool LazyFlag2;
 extern bool UDown;
 extern bool DDown;
 extern bool MouseDown;
 extern bool PlsPlaySound;
 extern bool LazyDebug;
 extern bool Ded;
+extern bool Restart;
 extern bool ShallIRenderHim;
 
 extern int CameraX;
@@ -86,6 +92,7 @@ extern int PlayerX;
 extern int PlayerY;
 extern int Lives;
 extern int Mag, Dur;
+extern int PlayerXVel, PlayerYVel;
 
 extern enum Gamestate {MENU,GAME};
 extern Gamestate State;

@@ -24,7 +24,8 @@ void DoEnemyProjectiles()
 		for(int i = 0; i <= ProjectileVector.size() - 7; i += 7)
 		{
 			if(ACTIVE == 0) continue;
-
+			if ( XPOS < 500 || XPOS > 5500 || YPOS < 500 || YPOS > 5500) ACTIVE = 0;
+			//if (ACTIVE == 0) ProjectileVector.erase(ProjectileVector.at(i),ProjectileVector.at(i + 7));
 			FRAMETIME += 1;
 			if(FRAMETIME == 2)
 			{

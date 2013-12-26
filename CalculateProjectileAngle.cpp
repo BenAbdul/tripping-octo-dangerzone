@@ -2,13 +2,11 @@
 #include"OpenDebugWindow.h"
 #define PI 3.14159265
 
-//Oh god no I hate trigonometry
-
 double CalculateProjectileAngle(float PlayerX, float PlayerY, float MouseX, float MouseY)
 {
 	float Theta, Calculation;
 	PlayerY = 500 - PlayerY;
-	MouseY = 500 - MouseY; //I forgot the Y axis is inverted
+	MouseY = 500 - MouseY; //Y axis is inverted
 
 	if((PlayerX > MouseX) && (MouseY > PlayerY))//If the mouse is to the top left of the player
 	{
@@ -42,7 +40,7 @@ double CalculateProjectileAngle(float PlayerX, float PlayerY, float MouseX, floa
 		if (MouseY > PlayerY) return 0;
 		else return 180;
 	}
-	else if (MouseY = PlayerY)
+	else if (MouseY == PlayerY)
 	{
 		if(MouseX > PlayerX) return 90;
 		else return 270;

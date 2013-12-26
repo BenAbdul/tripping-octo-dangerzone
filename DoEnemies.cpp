@@ -2,40 +2,9 @@
 #include"Declarations.h"
 #include"Game.h"
 
-bool LazyFlag = false;
-
-int CurrentID = 0;
+void CheckShake();
 int InvincibilityFrames = 0;
-Enemy::Enemy()
-{
-	xPos = 0;
-	yPos = 0;
-	CurrentID++;
-	ID = CurrentID;
-	do {
-		xPos = rand () % 5500 + 500;
-		if (xPos < CameraX || xPos > CameraX + 800) LazyFlag = true;
-	} while (LazyFlag == false);
-	LazyFlag = false;
 
-	do {
-		yPos = rand () % 5500 + 500;
-		if (yPos < CameraY || yPos > CameraY + 500) LazyFlag = true;
-	} while(LazyFlag == false);
-
-	LazyFlag = false;
-	SpareStream.str("");
-	SpareStream << "New enemy created at (" << xPos << "," << yPos <<")";
-	OpenDebugWindow(SpareStream.str());
-	Frame = 0;
-	FrameTime = 0;
-	xVel = 0;
-	yVel = 0;
-	Active = 1;
-	Facing = 0;
-}
-
-std::vector<Enemy> EnemyVector;
 
 
 #define CURRENTCLASS EnemyVector.at(x)
@@ -56,23 +25,24 @@ void DoEnemies()
 		for(int x = 0; x < EnemyVector.size(); x++)
 		{
 			if (CURRENTCLASS.yPos < 500) {CURRENTCLASS.yPos = 500; CURRENTCLASS.yVel = CURRENTCLASS.yVel / -2;}
-			else if (CURRENTCLASS.yPos + 36 > 5500) {CURRENTCLASS.yPos = 5500 - 36; CURRENTCLASS.yVel = CURRENTCLASS.yVel / -2;;}
-			if (CURRENTCLASS.xPos < 500) {CURRENTCLASS.xPos = 500; CURRENTCLASS.xVel = CURRENTCLASS.xVel / -2;;}
-			else if (CURRENTCLASS.xPos + 49 > 5500) {CURRENTCLASS.xPos = 5500 - 49; CURRENTCLASS.xVel = CURRENTCLASS.xVel / -2;;}
+			else if (CURRENTCLASS.yPos + 25 > 5500) {CURRENTCLASS.yPos = 5500 - 25; CURRENTCLASS.yVel = CURRENTCLASS.yVel / -2;}
+			if (CURRENTCLASS.xPos < 500) {CURRENTCLASS.xPos = 500; CURRENTCLASS.xVel = CURRENTCLASS.xVel / -2;}
+			else if (CURRENTCLASS.xPos + 49 > 5500) {CURRENTCLASS.xPos = 5500 - 49; CURRENTCLASS.xVel = CURRENTCLASS.xVel / -2;}
 			if(CURRENTCLASS.Active == 1)
 			{
 				if(Ded == false)
 				{
 					if (InvincibilityFrames > 120)
 					{
-						if (PlayerX > CURRENTCLASS.xPos && PlayerX < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
+						if (PlayerX >= CURRENTCLASS.xPos && PlayerX <= CURRENTCLASS.xPos + 49 && PlayerY >= CURRENTCLASS.yPos && PlayerY <= CURRENTCLASS.yPos + 25) 	
 						{
 							Lives--;
 							InvincibilityFrames = 0;
-							Dur = 60; Mag = 10;
+							Dur = 30; Mag = 14;
 							if (Lives == -1)
 							{
 								Ded = true;
+								LDown,RDown,UDown,DDown = false;
 								KillerID = CURRENTCLASS.ID;
 							}
 						}
@@ -80,10 +50,23 @@ void DoEnemies()
 						{
 							Lives--;
 							InvincibilityFrames = 0;
-							Dur = 60; Mag = 10;;
+							Dur = 30; Mag = 14;
 							if (Lives == -1)
 							{
 								Ded = true;
+								LDown,RDown,UDown,DDown = false;
+								KillerID = CURRENTCLASS.ID;
+							}
+						}
+						else if (PlayerX + 27 > CURRENTCLASS.xPos && PlayerX + 27 < CURRENTCLASS.xPos + 49 && PlayerY > CURRENTCLASS.yPos && PlayerY < CURRENTCLASS.yPos + 25) 	
+						{
+							Lives--;
+							InvincibilityFrames = 0;
+							Dur = 30; Mag = 14;
+							if (Lives == -1)
+							{
+								Ded = true;
+								LDown,RDown,UDown,DDown = false;
 								KillerID = CURRENTCLASS.ID;
 							}
 						}
@@ -114,47 +97,52 @@ void DoEnemies()
 					double DeltaX, DeltaY;
 					double Distance;
 
-					PlayerX += Character.xVel * 1.5;
-					PlayerY += Character.yVel * 1.5;
+					int PseudoX = PlayerX + Character.xVel * CURRENTCLASS.Random;
+					int PseudoY = PlayerY + Character.yVel * CURRENTCLASS.Random;
 					
-					if (PlayerX < CURRENTCLASS.xPos &&  PlayerY < CURRENTCLASS.yPos) //Top left
+					if (PseudoX < CURRENTCLASS.xPos &&  PseudoY < CURRENTCLASS.yPos) //Top left
 					{
-						int poo = CURRENTCLASS.xPos;
-						int wee = CURRENTCLASS.yPos;
-
-						DeltaX = CURRENTCLASS.xPos - PlayerX;
-						DeltaY = CURRENTCLASS.yPos - PlayerY;
+						DeltaX = CURRENTCLASS.xPos - PseudoX;
+						DeltaY = CURRENTCLASS.yPos - PseudoY;
 						Distance = sqrt(DeltaX + DeltaY);
 						CURRENTCLASS.xVel = (DeltaX / Distance) * -1;
 						CURRENTCLASS.yVel = DeltaY / Distance;//) * -1;
-						int anus = CURRENTCLASS.yVel;
+						CURRENTCLASS.Facing = 0;
 					}
 
-					else if (PlayerX > CURRENTCLASS.xPos &&  PlayerY < CURRENTCLASS.yPos) //Top right
+					else if (PseudoX > CURRENTCLASS.xPos &&  PseudoY < CURRENTCLASS.yPos) //Top right
 					{
-						DeltaX = PlayerX - CURRENTCLASS.xPos;
-						DeltaY = CURRENTCLASS.yPos - PlayerY;
+						DeltaX = PseudoX - CURRENTCLASS.xPos;
+						DeltaY = CURRENTCLASS.yPos - PseudoY;
 						Distance = sqrt(DeltaX + DeltaY);
 						CURRENTCLASS.xVel = DeltaX / Distance;
 						CURRENTCLASS.yVel = DeltaY / Distance;
+						CURRENTCLASS.Facing = 0;
 					}
 	
-					else if (PlayerX < CURRENTCLASS.xPos &&  PlayerY > CURRENTCLASS.yPos) //Bottom left
+					else if (PseudoX < CURRENTCLASS.xPos &&  PseudoY > CURRENTCLASS.yPos) //Bottom left
 					{
-						DeltaX = CURRENTCLASS.xPos - PlayerX;
-						DeltaY = PlayerY - CURRENTCLASS.yPos;
+						DeltaX = CURRENTCLASS.xPos - PseudoX;
+						DeltaY = PseudoY - CURRENTCLASS.yPos;
 						Distance = sqrt(DeltaX + DeltaY);
 						CURRENTCLASS.xVel = (DeltaX / Distance) * -1;
 						CURRENTCLASS.yVel = (DeltaY / Distance) * -1;
+						CURRENTCLASS.Facing = 1;
 					}
 	
-					else if (PlayerX > CURRENTCLASS.xPos &&  PlayerY > CURRENTCLASS.yPos) //Bottom right
+					else if (PseudoX > CURRENTCLASS.xPos &&  PseudoY > CURRENTCLASS.yPos) //Bottom right
 					{
-						DeltaX = PlayerX - CURRENTCLASS.xPos;
-						DeltaY = PlayerY - CURRENTCLASS.yPos;
+						DeltaX = PseudoX - CURRENTCLASS.xPos;
+						DeltaY = PseudoY - CURRENTCLASS.yPos;
 						Distance = sqrt(DeltaX + DeltaY);
 						CURRENTCLASS.xVel = DeltaX / Distance;
 						CURRENTCLASS.yVel = (DeltaY * -1) / Distance;
+						CURRENTCLASS.Facing = 1;
+					}
+					else
+					{
+						if (CURRENTCLASS.xPos == PlayerX) CURRENTCLASS.xPos++;
+						else if (CURRENTCLASS.yPos == PlayerY) CURRENTCLASS.yPos--;
 					}
 					CURRENTCLASS.yVel = CURRENTCLASS.yVel * -1;
 					//CURRENTCLASS.xVel = CURRENTCLASS.xVel * 1.5;
@@ -167,26 +155,26 @@ void DoEnemies()
 				{
 					if (CURRENTCLASS.xVel > 0)
 					{
-						if(CURRENTCLASS.xVel - 0.05 < 0) CURRENTCLASS.xVel = 0;
-						else CURRENTCLASS.xVel-=0.05;
+						if(CURRENTCLASS.xVel - 0.1 < 0) CURRENTCLASS.xVel = 0;
+						else CURRENTCLASS.xVel-=0.1;
 					}
 					
 					else if (CURRENTCLASS.xVel < 0)
 					{
-						if(CURRENTCLASS.xVel + 0.05 > 0) CURRENTCLASS.xVel = 0;
-						else CURRENTCLASS.xVel += 0.05;
+						if(CURRENTCLASS.xVel + 0.1 > 0) CURRENTCLASS.xVel = 0;
+						else CURRENTCLASS.xVel += 0.1;
 					}
 
 					if (CURRENTCLASS.yVel > 0)
 					{
-						if(CURRENTCLASS.yVel - 0.05 < 0) CURRENTCLASS.yVel = 0;
-						else CURRENTCLASS.yVel -= 0.05;
+						if(CURRENTCLASS.yVel - 0.1 < 0) CURRENTCLASS.yVel = 0;
+						else CURRENTCLASS.yVel -= 0.1;
 					}
 				
 					else if (CURRENTCLASS.yVel < 0)
 					{
-						if(CURRENTCLASS.yVel + 0.05 > 0) CURRENTCLASS.yVel = 0;
-						else CURRENTCLASS.yVel += 0.05;
+						if(CURRENTCLASS.yVel + 0.1 > 0) CURRENTCLASS.yVel = 0;
+						else CURRENTCLASS.yVel += 0.1;
 					}
 				}
 
@@ -207,14 +195,14 @@ void DoEnemies()
 				}
 				else if (Ded == false)
 				{
-					if(CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos < CameraY) ApplySurface(0,0,EnemuIndicator,Screen,&IndicatorClips[6]);
-					else if (CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(0,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[4]);
-					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenHeight && CURRENTCLASS.yPos < CameraY) ApplySurface(ScreenWidth - 50,0,EnemuIndicator,Screen,&IndicatorClips[0]);
-					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenHeight && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(ScreenWidth - 50,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[3]);
-					else if (CURRENTCLASS.xPos + 49 < CameraX) ApplySurface(0,CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen,&IndicatorClips[5]);
-					else if (CURRENTCLASS.xPos > CameraX + ScreenWidth) ApplySurface(ScreenWidth - 50, CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen,&IndicatorClips[2]);
-					else if (CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(CURRENTCLASS.xPos - CameraX,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[3]);
-					else if (CURRENTCLASS.yPos < CameraY) ApplySurface(CURRENTCLASS.xPos - CameraX,0,EnemuIndicator,Screen,&IndicatorClips[0]);
+					if(CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos < CameraY) ApplySurface(0,0,EnemuIndicator,Screen,&IndicatorClips[7]); //Top left
+					else if (CURRENTCLASS.xPos + 49 < CameraX && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(0,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[5]); //Bottom left
+					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenWidth && CURRENTCLASS.yPos < CameraY) ApplySurface(ScreenWidth - 50,0,EnemuIndicator,Screen,&IndicatorClips[1]); //Top right
+					else if (CURRENTCLASS.xPos + 49 > CameraX + ScreenWidth && CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(ScreenWidth - 50,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[3]); //Bottom right
+					else if (CURRENTCLASS.xPos + 49 < CameraX) ApplySurface(0,CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen,&IndicatorClips[6]); //Left
+					else if (CURRENTCLASS.xPos > CameraX + ScreenWidth) ApplySurface(ScreenWidth - 50, CURRENTCLASS.yPos - CameraY,EnemuIndicator,Screen,&IndicatorClips[2]); //Right
+					else if (CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(CURRENTCLASS.xPos - CameraX,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[4]); //Bottom
+					else if (CURRENTCLASS.yPos < CameraY) ApplySurface(CURRENTCLASS.xPos - CameraX,0,EnemuIndicator,Screen,&IndicatorClips[0]); //Top
 				}
 			}
 			else
@@ -249,11 +237,32 @@ void DoEnemies()
 		}
 	}
 }
+
+void CheckShake()
+{
+	if (InvincibilityFrames > 10 && InvincibilityFrames < 20) ShallIRenderHim = false;
+	else if (InvincibilityFrames > 30 && InvincibilityFrames < 40) ShallIRenderHim = false;
+	else if (InvincibilityFrames > 50 && InvincibilityFrames < 60) ShallIRenderHim = false;
+	else if (InvincibilityFrames > 70 && InvincibilityFrames < 80) ShallIRenderHim = false;
+	else if (InvincibilityFrames > 90 && InvincibilityFrames < 100) ShallIRenderHim = false;
+	else if (InvincibilityFrames > 110 && InvincibilityFrames < 120) ShallIRenderHim = false;
+	else ShallIRenderHim = true; 
+
+	if (Dur >= 1)
+	{
+		Dur--;
+		Viewport.xOffSet = rand () % Mag + ((Mag/2)* -1);
+		Viewport.yOffSet = rand () % Mag + ((Mag/2) * -1);
+		if (Dur == 1)
+		{
+			XChange = 0;
+			YChange = 0;
+		}
+	}
+}
+
 void CreateEnemy()
 {
 	Enemy TopLel;
-	SpareStream.str("");
-	SpareStream << "New enemy created at (" << TopLel.xPos << "," << TopLel.yPos <<")";
-	OpenDebugWindow(SpareStream.str());
 	EnemyVector.push_back(TopLel);
 }

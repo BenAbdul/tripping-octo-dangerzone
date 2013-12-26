@@ -1,5 +1,6 @@
 #include"Declarations.h"
 #include "OpenDebugWindow.h"
+#include "DoEnemies.h"
 
 SDL_Surface *LoadImage( std::string filename )
 {
@@ -12,6 +13,11 @@ SDL_Surface *LoadImage( std::string filename )
         OptimizedImage = SDL_DisplayFormatAlpha( LoadedImage );
         SDL_FreeSurface( LoadedImage );
     }
+	else 
+	{
+		OpenDebugWindow("Failed to load last file");
+		OpenDebugWindow("Open");
+	}
     return OptimizedImage;
 }
 
@@ -22,16 +28,20 @@ int YChange = 0;
 int Kills = 0;
 int KillerID = 0;
 int PlayerX, PlayerY = 0;
-int Lives = 3;
+int PlayerXVel, PlayerYVel = 0;
+int Lives = 4;
 
 SDL_Event event;
 
 bool WasItInit = false;
+bool Quit = false;
+bool Restart = false;
 bool LDown = false;
 bool RDown = false;
 bool UDown = false;
 bool DDown = false;
 bool Ded = false;
+bool LazyFlag2 = false;
 bool MouseDown = false;
 bool PlsPlaySound = true;
 bool LazyDebug = false;
@@ -40,6 +50,7 @@ bool ShallIRenderHim = true;
 std::stringstream SpareStream;
 
 std::vector <double> ProjectileVector;
+std::vector<Enemy> EnemyVector;
 
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
@@ -59,20 +70,21 @@ SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
 SDL_Surface *MenuBackground = NULL;
 SDL_Surface *CursorSheet = NULL;
-SDL_Surface *RShadow = NULL;
-SDL_Surface *LShadow = NULL;
-SDL_Surface *Shadow = NULL;
 SDL_Surface *YouDied = NULL;
 SDL_Surface *YouAreShit = NULL;
 TTF_Font *EightBitLimit = NULL;
+TTF_Font *EightBitLimitBig = NULL;
 TTF_Font *KarmaFuture = NULL;
 TTF_Font *EightBitLimitSmall = NULL;
 SDL_Surface *Message1 = NULL;
 SDL_Surface *LivesIcon = NULL;
 SDL_Surface *Message2 = NULL;
 SDL_Surface *PausedScreen = NULL;
+SDL_Surface *Background2 = NULL;
 SDL_Surface *Window = NULL;
 SDL_Surface *U1 = NULL;
+SDL_Surface *SmallGrid = NULL;
+SDL_Surface *BigGrid = NULL;
 SDL_Surface *FrontDed = NULL;
 SDL_Surface *D1 = NULL;
 SDL_Surface *L1 = NULL;
@@ -81,6 +93,7 @@ SDL_Surface *Projectile = NULL;
 SDL_Surface *HUD = NULL;
 SDL_Surface *KillsImg = NULL;
 SDL_Surface *Sniper = NULL;
+SDL_Surface *SniperFlipped = NULL;
 SDL_Surface *EnemuIndicator = NULL;
 SDL_Surface *EnemyDownClips = NULL;
 SDL_Surface *EnemyUpClips = NULL;
@@ -93,7 +106,12 @@ void LoadFiles()
 	EnemuIndicator = LoadImage("Resources/Images/Indicators.png");
 	CursorSheet = LoadImage("Resources/Images/Cursor.png");
 	PausedScreen = LoadImage("Resources/Images/PauseScreen.png");
+	BigGrid = LoadImage("Resources/Images/25grid.png");
+	SmallGrid = LoadImage("Resources/Images/10grid.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
+	EightBitLimitBig = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",70);
+	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
+	EightBitLimitBig = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",70);
 	KarmaFuture = TTF_OpenFont("Resources/Fonts/KarmaFuture.ttf",34);
 	EightBitLimitSmall = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",16);
 	U1 = LoadImage("Resources/Images/Character/U1.png");
@@ -103,14 +121,14 @@ void LoadFiles()
 	LivesIcon = LoadImage("Resources/Images/Life.png");
 	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
 	EnemyUpClips = LoadImage("Resources/Images/EnemyUpwards.png");
-	RShadow = LoadImage("Resources/Images/50shadow.png");
 	YouDied = LoadImage("Resources/Images/YouDied.png");
+	Background2 = LoadImage("Resources/Images/Background2.png");
 	YouAreShit = LoadImage("Resources/Images/YouAreShit.png");
-	LShadow = LoadImage("Resources/Images/27shadow.png");
 	Projectile = LoadImage("Resources/Images/TempProjectile.png");
 	HUD = LoadImage("Resources/Images/UI.png");
 	FrontDed = LoadImage("Resources/Images/TempDed.png");
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
+	SniperFlipped = LoadImage("Resources/Images/LeSniperFlipped.png");
 	KillsImg = LoadImage("Resources/Images/Kills.png");
 }
 
@@ -160,33 +178,11 @@ bool SetClips()
 	return true;
 }
 
-void CheckShake()
-{
-	if (Dur > 0)
-	{
-		Dur--;
-		if (Dur > 10 && Dur < 20) ShallIRenderHim = false;
-		else if (Dur > 30 && Dur < 40) ShallIRenderHim = false;
-		else if (Dur > 50 && Dur < 60) ShallIRenderHim = false;
-		else if (Dur > 70 && Dur < 80) ShallIRenderHim = false;
-		else if (Dur > 90 && Dur < 100) ShallIRenderHim = false;
-		else if (Dur > 110 && Dur < 120) ShallIRenderHim = false;
-		else ShallIRenderHim = true; 
-		XChange = rand () % Mag + ((Mag/2)* -1);
-		YChange = rand () % Mag + ((Mag/2) * -1);
-		if (Dur == 0)
-		{
-			XChange = 0;
-			YChange = 0;
-		}
-	}
-}
 void ApplySurface( int x, int y, SDL_Surface* Source, SDL_Surface* Destination, SDL_Rect* Clip)
 {
     SDL_Rect offset;
-	offset.x = x;
-    offset.y = y;
-	if (XChange != 0) __debugbreak();
+	offset.x = x + XChange;
+    offset.y = y + YChange;
     SDL_BlitSurface( Source, Clip, Destination, &offset );
 }
 
@@ -222,20 +218,21 @@ bool CheckFiles()
 	else if (D1 == NULL) return false;
 	else if (L1 == NULL) return false;
 	else if (KillsImg == NULL) return false;
-	else if (RShadow == NULL) return false;
-	else if (LShadow == NULL) return false;
 	else if (YouDied == NULL) return false;
 	else if (LivesIcon == NULL) return false;
 	else if (YouAreShit == NULL) return false;
 	else if (Projectile == NULL) return false;
+	else if (BigGrid == NULL) return false;
+	else if (SmallGrid == NULL) return false;
+	else if (SniperFlipped == NULL) return false;
 	else if (Sniper == NULL) return false;
 	else if (EnemyDownClips == NULL) return false;
 	else if (EnemyUpClips == NULL) return false;
 	else if (EnemuIndicator == NULL) return false;
+	else if (Background2 == NULL) return false;
 	OpenDebugWindow("All files loaded successfully");
 	return true;
+	
 }
-
-bool Quit = false;
 
 Gamestate State = MENU;
