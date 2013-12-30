@@ -48,6 +48,7 @@ void Game()
 	bool Debug = false;
 	int Temp;
 	int FrameCount = 0;
+	int SomeOtherCount = 0;
 	int EnemySpawnTimer = 0;
 	double xRatio, yRatio = 0;
 	bool ClickDone = false;
@@ -66,7 +67,9 @@ void Game()
 	while (Quit == false && State == GAME)
 	{
 		FPS.start();
+
 		CheckShake();
+		LazyFlag2 = false;
 
 		if (Ded == true)
 		{
@@ -80,12 +83,13 @@ void Game()
 		}
 
 		FrameCount++;
-		if(FrameCount == 200)
+		if(FrameCount == 90)
 		{
 			FrameCount = 0;
+			SomeOtherCount++;
+			if (SomeOtherCount == 4 && EnemySpawnTimer < 4) EnemySpawnTimer++; 
 			LazyFlag2 = false;
 			for (int x = EnemySpawnTimer; x >= 0; x--) CreateEnemy();
-			if (EnemySpawnTimer < 11) EnemySpawnTimer++;
 		}
 
 		Character.HandleEvents();
@@ -205,7 +209,7 @@ void Game()
 					const char *KillsChar = Cheat.c_str();
 					Message = TTF_RenderText_Solid(EightBitLimit,KillsChar,White);
 				}
-				else Message = TTF_RenderText_Solid(EightBitLimit,"0",White);
+				else Message = TTF_RenderText_Solid(EightBitLimit,"-",White);
 				ApplySurface(540 + (45 * i),(500 - HUD->h) + 24,Message,Screen);
 			}
 		}

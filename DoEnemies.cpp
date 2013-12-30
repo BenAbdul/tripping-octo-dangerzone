@@ -188,7 +188,9 @@ void DoEnemies()
 					if (CURRENTCLASS.Frame == 7) CURRENTCLASS.Frame = 0;
 				}
 
-				if (CURRENTCLASS.xPos + 49 > CameraX && CURRENTCLASS.xPos  < CameraX + 800 && CURRENTCLASS.yPos > CameraY && CURRENTCLASS.yPos < CameraY + 500)
+				if (CURRENTCLASS.Frame > 3) CURRENTCLASS.yPos += 3;
+
+				if (CURRENTCLASS.xPos + 49 > CameraX && CURRENTCLASS.xPos  < CameraX + 800 && CURRENTCLASS.yPos + 49 > CameraY && CURRENTCLASS.yPos < CameraY + 500)
 				{
 					if (CURRENTCLASS.Facing == 1) ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyDownClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
 					else ApplySurface(CURRENTCLASS.xPos - CameraX, CURRENTCLASS.yPos - CameraY,EnemyUpClips,Screen,&EnemyDownClipRect[CURRENTCLASS.Frame]);
@@ -204,6 +206,7 @@ void DoEnemies()
 					else if (CURRENTCLASS.yPos > CameraY + ScreenHeight) ApplySurface(CURRENTCLASS.xPos - CameraX,ScreenHeight - 50,EnemuIndicator,Screen,&IndicatorClips[4]); //Bottom
 					else if (CURRENTCLASS.yPos < CameraY) ApplySurface(CURRENTCLASS.xPos - CameraX,0,EnemuIndicator,Screen,&IndicatorClips[0]); //Top
 				}
+				if (CURRENTCLASS.Frame > 3) CURRENTCLASS.yPos -= 3;
 			}
 			else
 			{
