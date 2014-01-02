@@ -12,13 +12,14 @@
 #include "SDL_rotozoom.h"
 #include "OpenDebugWindow.h"
 #include "EnemyClass.h"
+#include "ButtonClass.h"
 
 extern SDL_Event event;
 
 extern std::stringstream SpareStream;
 
 extern std::vector <double> ProjectileVector;
-extern std::vector<Enemy> EnemyVector;
+extern std::vector <Enemy> EnemyVector;
 
 extern const int ScreenWidth;
 extern const int ScreenHeight;
@@ -36,10 +37,13 @@ SDL_Rect IndicatorClips[];
 extern SDL_Rect BottomWall;
 
 extern SDL_Surface *Background;
+extern SDL_Surface *HighscoresBackground;
 extern SDL_Surface *MenuBackground;
 extern SDL_Surface *Screen;
 extern SDL_Surface *Window;
 extern SDL_Surface *CursorSheet;
+extern SDL_Surface *StartNormal;
+extern SDL_Surface *StartMouseOver;
 extern SDL_Surface *PausedScreen;
 extern SDL_Surface *EnemuIndicator;
 extern SDL_Surface *YouDied;
@@ -52,6 +56,8 @@ extern SDL_Surface *L1;
 extern SDL_Surface *R1;
 extern SDL_Surface *FrontDed;
 extern SDL_Surface *Projectile;
+extern SDL_Surface *HighscoresNormal;
+extern SDL_Surface *HighscoresMouseover;
 extern SDL_Surface *HUD;
 extern SDL_Surface *Sniper;
 extern SDL_Surface *BigGrid;
@@ -94,7 +100,7 @@ extern int Lives;
 extern int Mag, Dur;
 extern int PlayerXVel, PlayerYVel;
 
-extern enum Gamestate {MENU,GAME};
+extern enum Gamestate {MENU,GAME,HIGHSCORES};
 extern Gamestate State;
 
 SDL_Surface *LoadImage( std::string filename );

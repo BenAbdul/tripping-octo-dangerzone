@@ -56,10 +56,12 @@ void Game()
 	int YouDiedProgress = 0;
 	double YouAreShitProgress = 0;
 	PlayRandomMusic();
+	Mix_Chunk *WickedSick = NULL;
 	Mix_Chunk *Minigun = NULL;
 	Mix_Chunk *Machinegun= NULL;
 	Mix_Chunk *Pistol= NULL;
 	Mix_Chunk *Click= NULL;
+	WickedSick = Mix_LoadWAV("Resources/Sounds/WickedSick.ogg");
 	Minigun = Mix_LoadWAV("Resources/Sounds/Minigun.ogg");
 	Machinegun = Mix_LoadWAV("Resources/Sounds/MachineGun.ogg");
 	Pistol = Mix_LoadWAV("Resources/Sounds/Pistol.ogg");
@@ -176,7 +178,6 @@ void Game()
 		else if (Viewport.CameraRect.y < 500 || Viewport.CameraRect.y > 4500) ApplySurface(0,0,Background2,Screen,&Viewport.CameraRect);
 		if (ShallIRenderHim == true) ApplySurface(Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y,Character.CurrentSprite,Screen);
 		Mouse.Render();
-		DoEnemies();
 		DoEnemyProjectiles();
 
 		if (Ded == false)
@@ -210,7 +211,7 @@ void Game()
 					Message = TTF_RenderText_Solid(EightBitLimit,KillsChar,White);
 				}
 				else Message = TTF_RenderText_Solid(EightBitLimit,"-",White);
-				ApplySurface(540 + (45 * i),(500 - HUD->h) + 24,Message,Screen);
+				ApplySurface(540 + (45 * i),(500 - HUD->h) + 21,Message,Screen);
 			}
 		}
 		
@@ -240,21 +241,28 @@ void Game()
 					std::string Cheat = KillsString.substr(i,i+1);
 					const char *KillsChar = Cheat.c_str();
 					Message = TTF_RenderText_Solid(EightBitLimit,KillsChar,White);
-				}
-				else Message = TTF_RenderText_Solid(EightBitLimit,"0",White);
-				ApplySurface(540 + (45 * i),LAYZX3 + 24,Message,Screen);
-			}
-		}
-
+				} 
+				else Message = TTF_RenderText_Solid(EightBitLimit,"-",White); 
+				ApplySurface(540 + (45 * i),LAYZX3 + 24,Message,Screen); 
+			} 
+		} 
+		 
+		DoEnemies(); 
+		 
 		if (YouAreShitProgress == 91)
 		{
 			YouAreShitProgress--;
 			if(ClickDone == false)
 			{
-				if (Kills < 20) Mix_PlayChannel(-1,Click,0);
-				else if (Kills < 90) Mix_PlayChannel(-1,Pistol,0);
-				else if (Kills < 140) Mix_PlayChannel(-1,Machinegun,0);
-				else if (Kills < 200) Mix_PlayChannel(-1,Minigun,0);
+				if (PlsPlaySound == true)
+				{
+					if (Kills < 15) Mix_PlayChannel(-1,Click,0);
+					else if (Kills < 70) Mix_PlayChannel(-1,Pistol,0);
+					else if (Kills < 100) Mix_PlayChannel(-1,Machinegun,0);
+					else if (Kills < 150) Mix_PlayChannel(-1,Minigun,0);
+					else {Mix_PlayChannel(-1,WickedSick,0); Mix_HaltMusic();}
+				}
+
 				ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen);
 				Dur = 20;
 				Mag = 12;
@@ -269,7 +277,7 @@ void Game()
 			SpareStream.str("");
 			SpareStream << Kills;
 			Message = TTF_RenderText_Solid(EightBitLimitBig,SpareStream.str().c_str(),White);
-			ApplySurface(((ScreenWidth - KillsImg->w) / 2) + 10, 300, Message, Screen);
+			ApplySurface(((ScreenWidth - KillsImg->w) / 2) + (KillsImg->w - Message->w)/2, 250 + (KillsImg->h - Message->h)/2, Message, Screen);
 		}
 
 		GetXYRatio(&xRatio,&yRatio,Mouse.MouseX,Mouse.MouseY,Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y);
@@ -277,6 +285,8 @@ void Game()
 
 		if(Debug == true)
 		{
+			
+			if (Lives == 1) Lives = 4;
 			std::stringstream DebugStream;
 			DebugStream.str("");
 			DebugStream << "Character world position " << Character.WorldxPos << " - " << Character.WorldyPos;

@@ -50,7 +50,7 @@ bool ShallIRenderHim = true;
 std::stringstream SpareStream;
 
 std::vector <double> ProjectileVector;
-std::vector<Enemy> EnemyVector;
+std::vector <Enemy> EnemyVector;
 
 const int ScreenWidth = 800;
 const int ScreenHeight = 500;
@@ -68,10 +68,13 @@ SDL_Rect IndicatorClips[8];
 
 SDL_Surface *Screen = NULL;
 SDL_Surface *Background = NULL;
+SDL_Surface *HighscoresBackground = NULL;
+SDL_Surface *StartNormal = NULL;
+SDL_Surface *StartMouseOver = NULL;
 SDL_Surface *MenuBackground = NULL;
 SDL_Surface *CursorSheet = NULL;
 SDL_Surface *YouDied = NULL;
-SDL_Surface *YouAreShit = NULL;
+SDL_Surface *YouAreShit = NULL; 
 TTF_Font *EightBitLimit = NULL;
 TTF_Font *EightBitLimitBig = NULL;
 TTF_Font *KarmaFuture = NULL;
@@ -81,6 +84,8 @@ SDL_Surface *LivesIcon = NULL;
 SDL_Surface *Message2 = NULL;
 SDL_Surface *PausedScreen = NULL;
 SDL_Surface *Background2 = NULL;
+SDL_Surface *HighscoresNormal = NULL;
+SDL_Surface *HighscoresMouseover = NULL;
 SDL_Surface *Window = NULL;
 SDL_Surface *U1 = NULL;
 SDL_Surface *SmallGrid = NULL;
@@ -102,14 +107,12 @@ void LoadFiles()
 {
 	Screen = SDL_SetVideoMode(ScreenWidth,ScreenHeight,ScreenBBP,SDL_SWSURFACE);
 	Background = LoadImage("Resources/Images/Background.png");
-	MenuBackground = LoadImage("Resources/Images/MenuBackground.png");
 	EnemuIndicator = LoadImage("Resources/Images/Indicators.png");
 	CursorSheet = LoadImage("Resources/Images/Cursor.png");
 	PausedScreen = LoadImage("Resources/Images/PauseScreen.png");
 	BigGrid = LoadImage("Resources/Images/25grid.png");
 	SmallGrid = LoadImage("Resources/Images/10grid.png");
-	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
-	EightBitLimitBig = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",70);
+	MenuBackground = LoadImage("Resources/Images/TempMenu.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
 	EightBitLimitBig = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",70);
 	KarmaFuture = TTF_OpenFont("Resources/Fonts/KarmaFuture.ttf",34);
@@ -118,9 +121,14 @@ void LoadFiles()
 	D1 = LoadImage("Resources/Images/Character/D1.png");
 	L1 = LoadImage("Resources/Images/Character/L1.png");
 	R1 = LoadImage("Resources/Images/Character/R1.png");
+	StartNormal = LoadImage("Resources/Images/Start.png");
+	StartMouseOver = LoadImage("Resources/Images/StartMouseOver.png");
 	LivesIcon = LoadImage("Resources/Images/Life.png");
+	HighscoresNormal = LoadImage("Resources/Images/HighscoresNormal.png");
+	HighscoresMouseover = LoadImage("Resources/Images/HighscoresMouseover.png");
 	EnemyDownClips = LoadImage("Resources/Images/EnemyDownwards.png");
 	EnemyUpClips = LoadImage("Resources/Images/EnemyUpwards.png");
+	HighscoresBackground = LoadImage("Resources/Images/HighscoresBackground.png");
 	YouDied = LoadImage("Resources/Images/YouDied.png");
 	Background2 = LoadImage("Resources/Images/Background2.png");
 	YouAreShit = LoadImage("Resources/Images/YouAreShit.png");
@@ -205,31 +213,36 @@ bool Init()
 bool CheckFiles()
 {
 	WasItInit = TTF_WasInit();
-	if (Background == NULL) return false;
-	else if (MenuBackground == NULL) return false;
-	else if (EightBitLimit == NULL) return false;
-	else if (CursorSheet == NULL) return false;
-	else if (KarmaFuture == NULL) return false;
-	else if (EightBitLimitSmall == NULL) return false;
-	else if (PausedScreen == NULL) return false;
-	else if (FrontDed == NULL) return false;
-	else if (U1 == NULL) return false;
-	else if (R1 == NULL) return false;
-	else if (D1 == NULL) return false;
-	else if (L1 == NULL) return false;
-	else if (KillsImg == NULL) return false;
-	else if (YouDied == NULL) return false;
-	else if (LivesIcon == NULL) return false;
-	else if (YouAreShit == NULL) return false;
-	else if (Projectile == NULL) return false;
-	else if (BigGrid == NULL) return false;
-	else if (SmallGrid == NULL) return false;
-	else if (SniperFlipped == NULL) return false;
-	else if (Sniper == NULL) return false;
-	else if (EnemyDownClips == NULL) return false;
-	else if (EnemyUpClips == NULL) return false;
-	else if (EnemuIndicator == NULL) return false;
-	else if (Background2 == NULL) return false;
+	if (Background == NULL) {OpenDebugWindow("Background failed to load!"); return false;}
+	else if (MenuBackground == NULL) {OpenDebugWindow("MenuBackground failed to load!");return false;}
+	else if (EightBitLimit == NULL) {OpenDebugWindow("Bens font failed to load!");return false;}
+	else if (CursorSheet == NULL) {OpenDebugWindow("CursorSheet failed to load!");return false;}
+	else if (KarmaFuture == NULL) {OpenDebugWindow("KarmaFuture failed to load!");return false;}
+	else if (EightBitLimitSmall == NULL) {OpenDebugWindow("Bens font small failed to load!");return false;}
+	else if (PausedScreen == NULL) {OpenDebugWindow("Pause screen failed to load!");return false;}
+	else if (FrontDed == NULL) {OpenDebugWindow("Frontded failed to load!");return false;}
+	else if (HighscoresNormal == NULL) {OpenDebugWindow("High Scores Normal failed to load!");return false;}
+	else if (HighscoresMouseover == NULL) {OpenDebugWindow("High Scores Mouseover failed to load!");return false;}
+	else if (U1 == NULL) {OpenDebugWindow("U1 failed to load!");return false;}
+	else if (R1 == NULL) {OpenDebugWindow("R1 failed to load!");return false;}
+	else if (D1 == NULL) {OpenDebugWindow("D1 failed to load!");return false;}
+	else if (L1 == NULL) {OpenDebugWindow("L1 failed to load!");return false;}
+	else if (StartNormal == NULL) {OpenDebugWindow("StartNormal failed to load!");return false;}
+	else if (StartMouseOver == NULL) {OpenDebugWindow("StartMouseOver failed to load!");return false;}
+	else if (KillsImg == NULL) {OpenDebugWindow("KillsImg failed to load!");return false;}
+	else if (YouDied == NULL) {OpenDebugWindow("YouDied failed to load!");return false;}
+	else if (LivesIcon == NULL) {OpenDebugWindow("LivesIcon failed to load!");return false;}
+	else if (YouAreShit == NULL) {OpenDebugWindow("You'reShit failed to load!");return false;}
+	else if (Projectile == NULL) {OpenDebugWindow("Projectile failed to load!");return false;}
+	else if (BigGrid == NULL) {OpenDebugWindow("BigGrid failed to load!");return false;}
+	else if (SmallGrid == NULL) {OpenDebugWindow("SmallGrid failed to load!");return false;}
+	else if (SniperFlipped == NULL) {OpenDebugWindow("Flipped sniper failed to load!");return false;}
+	else if (Sniper == NULL) {OpenDebugWindow("Sniper failed to load!");return false;}
+	else if (EnemyDownClips == NULL) {OpenDebugWindow("EnemyDownClips failed to load!");return false;}
+	else if (EnemyUpClips == NULL) {OpenDebugWindow("EnemyUpClips failed to load!");return false;}
+	else if (EnemuIndicator == NULL) {OpenDebugWindow("Enemy indicator failed to load!");return false;}
+	else if (HighscoresBackground == NULL) {OpenDebugWindow("Highscores Background indicator failed to load!");return false;}
+	else if (Background2 == NULL) {OpenDebugWindow("Background2 failed to load!");return false;}
 	OpenDebugWindow("All files loaded successfully");
 	return true;
 	

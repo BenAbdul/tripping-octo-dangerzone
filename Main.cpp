@@ -1,6 +1,7 @@
 #include"Declarations.h"
 #include"Menu.h"
 #include"Game.h"
+#include"HighScores.h"
 #include<time.h>
 
 int main (int argc, char* argv [])
@@ -18,25 +19,24 @@ int main (int argc, char* argv [])
 
 	while (Quit == false)
 	{
-
-	if (Restart == true)
-	{
-		State = GAME;
-		Ded = false;
-		Lives = 4;
-		EnemyVector.erase(EnemyVector.begin(),EnemyVector.end());
-		ProjectileVector.erase(ProjectileVector.begin(),ProjectileVector.end());
-		int CameraX = 0;
-		CameraY = 0;
-		XChange = 0;
-		YChange = 0;
-		Kills = 0;
-		KillerID = 0;
-		PlayerX, PlayerY = 0;
-		PlayerXVel, PlayerYVel = 0;
-		Lives = 4;
-		Restart = false;
-	}
+		if (Restart == true)
+		{
+			State = GAME;
+			Ded = false;
+			Lives = 4;
+			EnemyVector.erase(EnemyVector.begin(),EnemyVector.end());
+			ProjectileVector.erase(ProjectileVector.begin(),ProjectileVector.end());
+			int CameraX = 0;
+			CameraY = 0;
+			XChange = 0;
+			YChange = 0;
+			Kills = 0;
+			KillerID = 0;
+			PlayerX, PlayerY = 0;
+			PlayerXVel, PlayerYVel = 0;
+			Lives = 4;
+			Restart = false;
+		}
 		switch(State)
 		{
 		case MENU:
@@ -44,6 +44,9 @@ int main (int argc, char* argv [])
 			break;
 		case GAME:
 			Game();
+			break;
+		case HIGHSCORES:
+			HighScores();
 			break;
 		}
 	}

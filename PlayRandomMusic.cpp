@@ -5,7 +5,6 @@ void PlayRandomMusic()
 {
 	if (PlsPlaySound == true)
 	{
-		srand((time(NULL) * time(NULL)) / 100);
 		int ChosenSong = rand () %  8 + 1;
 		OpenDebugWindow("Loading and playing...");
 		SpareStream.str("");
