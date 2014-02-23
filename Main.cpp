@@ -2,6 +2,7 @@
 #include"Menu.h"
 #include"Game.h"
 #include"HighScores.h"
+#include"Options.h"
 #include<time.h>
 
 int main (int argc, char* argv [])
@@ -47,6 +48,9 @@ int main (int argc, char* argv [])
 			break;
 		case HIGHSCORES:
 			HighScores();
+			break;
+		case OPTIONS:
+			Options();
 			break;
 		}
 	}

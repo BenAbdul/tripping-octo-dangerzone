@@ -21,6 +21,7 @@ SDL_Surface *LoadImage( std::string filename )
     return OptimizedImage;
 }
 
+int Score1,Score2,Score3 = 0;
 int CameraX = 0;
 int CameraY = 0;
 int XChange = 0;
@@ -49,7 +50,10 @@ bool ShallIRenderHim = true;
 
 std::stringstream SpareStream;
 
+std::string HName1,HName2,HName3;
+
 std::vector <double> ProjectileVector;
+std::vector <int> ICantCode;
 std::vector <Enemy> EnemyVector;
 
 const int ScreenWidth = 800;
@@ -76,6 +80,8 @@ SDL_Surface *CursorSheet = NULL;
 SDL_Surface *YouDied = NULL;
 SDL_Surface *YouAreShit = NULL; 
 TTF_Font *EightBitLimit = NULL;
+TTF_Font *Takara = NULL;
+TTF_Font *TakaraBig = NULL;
 TTF_Font *EightBitLimitBig = NULL;
 TTF_Font *KarmaFuture = NULL;
 TTF_Font *EightBitLimitSmall = NULL;
@@ -86,6 +92,8 @@ SDL_Surface *PausedScreen = NULL;
 SDL_Surface *Background2 = NULL;
 SDL_Surface *HighscoresNormal = NULL;
 SDL_Surface *HighscoresMouseover = NULL;
+SDL_Surface *OptionsNormal = NULL;
+SDL_Surface *OptionsMouseover = NULL;
 SDL_Surface *Window = NULL;
 SDL_Surface *U1 = NULL;
 SDL_Surface *SmallGrid = NULL;
@@ -113,7 +121,11 @@ void LoadFiles()
 	BigGrid = LoadImage("Resources/Images/25grid.png");
 	SmallGrid = LoadImage("Resources/Images/10grid.png");
 	MenuBackground = LoadImage("Resources/Images/TempMenu.png");
+	OptionsNormal = LoadImage("Resources/Images/OptionsNormal.png");
+	OptionsMouseover = LoadImage("Resources/Images/OptionsMouseover.png");
 	EightBitLimit = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",26);
+	Takara = TTF_OpenFont("Resources/Fonts/Takara.ttf",26);
+	TakaraBig = TTF_OpenFont("Resources/Fonts/Takara.ttf",60);
 	EightBitLimitBig = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",70);
 	KarmaFuture = TTF_OpenFont("Resources/Fonts/KarmaFuture.ttf",34);
 	EightBitLimitSmall = TTF_OpenFont("Resources/Fonts/EightBitLimit.ttf",16);
@@ -138,6 +150,11 @@ void LoadFiles()
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
 	SniperFlipped = LoadImage("Resources/Images/LeSniperFlipped.png");
 	KillsImg = LoadImage("Resources/Images/Kills.png");
+
+	std::ifstream ScoresInput;
+	ScoresInput.open("TOD.DAT");
+	ScoresInput >> Score1 >> Score2 >> Score3 >> HName1 >> HName2 >> HName3;
+	ScoresInput.close();
 }
 
 int Dur, Mag;
@@ -229,6 +246,8 @@ bool CheckFiles()
 	else if (L1 == NULL) {OpenDebugWindow("L1 failed to load!");return false;}
 	else if (StartNormal == NULL) {OpenDebugWindow("StartNormal failed to load!");return false;}
 	else if (StartMouseOver == NULL) {OpenDebugWindow("StartMouseOver failed to load!");return false;}
+	else if (HighscoresNormal == NULL) {OpenDebugWindow("StartNormal failed to load!");return false;}
+	else if (HighscoresMouseover == NULL) {OpenDebugWindow("StartMouseOver failed to load!");return false;}
 	else if (KillsImg == NULL) {OpenDebugWindow("KillsImg failed to load!");return false;}
 	else if (YouDied == NULL) {OpenDebugWindow("YouDied failed to load!");return false;}
 	else if (LivesIcon == NULL) {OpenDebugWindow("LivesIcon failed to load!");return false;}

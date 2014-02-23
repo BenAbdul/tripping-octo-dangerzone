@@ -11,6 +11,7 @@ public:
 	SDL_Surface *NotNormal;
 
 	int ID;
+	int Offset;
 	 
 	Button();
 	bool IsMouseOver(int Mx, int My);

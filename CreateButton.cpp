@@ -2,7 +2,7 @@
 
 std::vector <Button> ButtonVector;
 
-void CreateButton(int Wx, int Wy, int WID,SDL_Surface *WUnPressed, SDL_Surface *WPressed)
+void CreateButton(int Wx, int Wy, int WID,SDL_Surface *WUnPressed, SDL_Surface *WPressed, int LOffset = 0)
 {
 	Button VectorButton;
 	VectorButton.ButtonRect.h = WUnPressed->h;
@@ -12,6 +12,7 @@ void CreateButton(int Wx, int Wy, int WID,SDL_Surface *WUnPressed, SDL_Surface *
 	VectorButton.ID = WID;
 	VectorButton.Normal = WUnPressed;
 	VectorButton.NotNormal = WPressed; //Or maybe mouseover
+	VectorButton.Offset = LOffset;
 	ButtonVector.push_back(VectorButton);
 }
 
@@ -30,7 +31,7 @@ int DoButtons()
 			if (CURRENTBUTTON.IsMouseOver(CurrentMouseX,CurrentMouseY))
 			{
 				MouseOver = true;
-				ApplySurface(CURRENTBUTTON.ButtonRect.x,CURRENTBUTTON.ButtonRect.y,CURRENTBUTTON.NotNormal,Screen);
+				ApplySurface(CURRENTBUTTON.ButtonRect.x - CURRENTBUTTON.Offset,CURRENTBUTTON.ButtonRect.y - CURRENTBUTTON.Offset,CURRENTBUTTON.NotNormal,Screen);
 			}
 			else 
 			{

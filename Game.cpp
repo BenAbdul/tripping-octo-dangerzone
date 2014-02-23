@@ -21,15 +21,103 @@
 #include<SDL_rotozoom.h>
 #include<math.h>
 #include<windows.h>
+#include<fstream>
 #include<sstream>
 
 Player Character;
 Camera Viewport;
 
+
+#define UNICODEINPUT event.key.keysym.unicode
+std::string GetStringInput()
+{
+	bool Done = false;	
+	std::string ReturnThis = "NotBad";
+	Message1 = TTF_RenderText_Solid(Takara,"Enter your name:",White);
+	Message2 = TTF_RenderText_Solid(TakaraBig,"You made the high scores!",White);
+	SDL_Surface * CurrentInput = TTF_RenderText_Solid(EightBitLimitBig,ReturnThis.c_str(),White);
+	SDL_EnableUNICODE(SDL_ENABLE);
+	while (!Done)
+	{
+		ApplySurface(0,0,Background,Screen);
+		ApplySurface((ScreenWidth - Message1->w)/2,190,Message1,Screen);
+		ApplySurface((ScreenWidth - Message2->w)/2,50,Message2,Screen);
+		CurrentInput = TTF_RenderText_Solid(EightBitLimitBig,ReturnThis.c_str(),White);
+		ApplySurface((ScreenWidth - CurrentInput->w)/2, (ScreenHeight - CurrentInput->h) /2, CurrentInput,Screen); 
+		SDL_Flip(Screen);
+		SDL_PumpEvents();
+		while(SDL_PollEvent(&event));
+		{
+			if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) 
+				Done = true;
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE)
+			{
+				if(ReturnThis.size() == 1) ReturnThis = " ";
+				else ReturnThis.erase(ReturnThis.size()-1,1);
+				SDL_Delay(150);
+			}
+			else if (ReturnThis.size() < 11)
+			{
+				if (UNICODEINPUT >= (Uint16)'A' && UNICODEINPUT <= (Uint16)'Z')
+				{
+					if (ReturnThis == " ") ReturnThis = ""; //bow down before me
+					ReturnThis += UNICODEINPUT; 
+					SDL_Delay(150);
+				}
+				
+				else if (UNICODEINPUT >= (Uint16)'a' && UNICODEINPUT <= (Uint16)'z')
+				{
+					if (ReturnThis == " ") ReturnThis = "";
+					ReturnThis += UNICODEINPUT; 
+					SDL_Delay(150);
+				}
+			}
+		}
+	}
+	return ReturnThis;
+}
+
+std::vector <int> BubbleSortVector(std::vector <int> ScoresVector)
+{
+	bool Done = false;
+	OpenDebugWindow("Entering BubbleSortVector");
+	while (Done == false)
+	{
+		Done = true;
+		OpenDebugWindow("ScoresVector:");
+		SpareStream.str("");
+		for (int i = 0; i < 4; i++) SpareStream << ScoresVector.at(i) << " ";
+		OpenDebugWindow(SpareStream.str().c_str());
+		OpenDebugWindow("ICantCode:");
+		SpareStream.str("");
+		for (int i = 0; i < 4; i++) SpareStream << ICantCode.at(i) << " ";
+		OpenDebugWindow(SpareStream.str().c_str());
+		
+		for (int i = 0; i < ScoresVector.size() - 1; i++)
+		{
+			if(ScoresVector.at(i) < ScoresVector.at(i+1))
+			{
+				int Temp = ScoresVector.at(i+1);
+				ScoresVector.at(i+1) = ScoresVector.at(i);
+				ScoresVector.at(i) = Temp;
+
+				Temp = ICantCode.at(i+1);
+				ICantCode.at(i+1) = ICantCode.at(i);
+				ICantCode.at(i) = Temp;
+
+				Done = false;
+			}
+		}
+	}
+	return ScoresVector;
+}
+
 void Game()
 {
 	SDL_WM_GrabInput( SDL_GRAB_ON );
 	SDL_ShowCursor(SDL_DISABLE);
+	ICantCode.erase(ICantCode.begin(),ICantCode.end());
+	for (int i = 0; i <= 3; i++) ICantCode.push_back(i);
 	Cursor Mouse;
 	SpareStream.str("");
 	SpareStream << "At the time of declaration, Mouse.FrameTime is " << Mouse.FrameTime;
@@ -40,6 +128,7 @@ void Game()
 	SDL_Surface *Weapon;
 	SDL_Surface *Message;
 	SDL_Rect Big;
+	double Counter = 0;
 	Big.h = 500;
 	Big.w = 800;
 	SDL_Rect Small;
@@ -53,6 +142,7 @@ void Game()
 	double xRatio, yRatio = 0;
 	bool ClickDone = false;
 	bool PieceOfPoo = false;
+	bool ScoresDone = false;
 	int YouDiedProgress = 0;
 	double YouAreShitProgress = 0;
 	PlayRandomMusic();
@@ -222,13 +312,14 @@ void Game()
 			double HURR_SIN_WONT_TAKE_AN_INT_AND_THIS_IS_EASIER_THAN_GOOGLING_THE_RETURN = YouDiedProgress * (PI / 180);
 			int x = 330 * (sin(HURR_SIN_WONT_TAKE_AN_INT_AND_THIS_IS_EASIER_THAN_GOOGLING));
 			LAYZX += x;
-			ApplySurface(LAYZX,50,YouDied,Screen);
+			ApplySurface(LAYZX,40,YouDied,Screen);
 			x = 800 * (sin(HURR_SIN_WONT_TAKE_AN_INT_AND_THIS_IS_EASIER_THAN_GOOGLING_THE_RETURN));
 			LAYZX2 -= x; 
-			ApplySurface(LAYZX2,150,YouAreShit,Screen);
+			ApplySurface(LAYZX2,140,YouAreShit,Screen);
 			x = 3 * (sin(HURR_SIN_WONT_TAKE_AN_INT_AND_THIS_IS_EASIER_THAN_GOOGLING_THE_RETURN));
 			LAYZX3 += x;  //actually should be LAYZY but I'm feeling layz
 			ApplySurface(0,LAYZX3,HUD,Screen);
+
 
 			SpareStream.str("");
 			SpareStream << Kills;
@@ -251,6 +342,7 @@ void Game()
 		 
 		if (YouAreShitProgress == 91)
 		{
+
 			YouAreShitProgress--;
 			if(ClickDone == false)
 			{
@@ -263,9 +355,10 @@ void Game()
 					else {Mix_PlayChannel(-1,WickedSick,0); Mix_HaltMusic();}
 				}
 
-				ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen);
+				ApplySurface((ScreenWidth - KillsImg->w) / 2,200,KillsImg,Screen);
 				Dur = 20;
 				Mag = 12;
+
 				ClickDone = true;
 				PieceOfPoo = true;
 			}
@@ -273,11 +366,47 @@ void Game()
 
 		if (PieceOfPoo == true)
 		{
-			ApplySurface((ScreenWidth - KillsImg->w) / 2,250,KillsImg,Screen); //Whats this?
+			ApplySurface((ScreenWidth - KillsImg->w) / 2,200,KillsImg,Screen); //Whats this?
 			SpareStream.str("");
 			SpareStream << Kills;
 			Message = TTF_RenderText_Solid(EightBitLimitBig,SpareStream.str().c_str(),White);
-			ApplySurface(((ScreenWidth - KillsImg->w) / 2) + (KillsImg->w - Message->w)/2, 250 + (KillsImg->h - Message->h)/2, Message, Screen);
+			ApplySurface(((ScreenWidth - KillsImg->w) / 2) + (KillsImg->w - Message->w)/2, 200 + (KillsImg->h - Message->h)/2, Message, Screen);
+			if (Counter < 180) Counter+=0.05;
+			else Counter-=0.05;
+			Message1 = TTF_RenderText_Solid(Takara,"R to restart",White);
+			Message2 = rotozoomSurface(Message1,0,2 * sin(Counter),0);
+			ApplySurface((ScreenWidth - Message2->w)/2,ScreenHeight - 80,Message2,Screen);
+			//Kills = 500;
+			if(Kills > Score3 && ScoresDone == false)
+			{
+				std::vector <int> ScoreVector;
+				std::string Name = "you";
+				
+				Name = GetStringInput();
+
+				ScoreVector.push_back(Kills);
+				ScoreVector.push_back(Score1);
+				ScoreVector.push_back(Score2);
+				ScoreVector.push_back(Score3);
+				ScoreVector = BubbleSortVector(ScoreVector);
+				ScoreVector.erase(ScoreVector.end() - 1, ScoreVector.end());
+				
+				std::string NameArray[4] = {Name,HName1,HName2,HName3};
+
+				HName1 = NameArray[ICantCode.at(0)];
+				HName2 = NameArray[ICantCode.at(1)];
+				HName3 = NameArray[ICantCode.at(2)];
+
+				Score1 = ScoreVector.at(0);
+				Score2 = ScoreVector.at(1);
+				Score3 = ScoreVector.at(2);
+				
+				std::ofstream ScoresOutput;
+				ScoresOutput.open("TOD.DAT");
+				ScoresOutput << Score1 << std::endl << Score2 << std::endl << Score3 << std::endl << HName1 << std::endl << HName2 << std::endl << HName3;
+				ScoresOutput.close();
+				ScoresDone = true;
+			}
 		}
 
 		GetXYRatio(&xRatio,&yRatio,Mouse.MouseX,Mouse.MouseY,Character.WorldxPos - Viewport.CameraRect.x,Character.WorldyPos - Viewport.CameraRect.y);

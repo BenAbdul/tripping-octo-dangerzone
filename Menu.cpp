@@ -15,12 +15,18 @@ void Menu()
 			State = GAME;
 			break;
 		case 2:
-			//__debugbreak();
 			State = HIGHSCORES;
 			break; //no defaults
+		case 3:
+			State = OPTIONS;
 		};
 		SDL_Flip(Screen);
-		CreateButton(91,278,1,StartNormal,StartMouseOver);
-		CreateButton(91,318,2,HighscoresNormal,HighscoresMouseover);
+		CreateButton(91,278,1,StartNormal,StartMouseOver,3);
+		CreateButton(91,318,2,HighscoresNormal,HighscoresMouseover,0);
+		CreateButton(91,358,3,OptionsNormal,OptionsMouseover,0);
+		while(SDL_PollEvent(&event))
+		{
+			if(event.type == SDL_QUIT) Quit = true;
+		}
 	}
 }

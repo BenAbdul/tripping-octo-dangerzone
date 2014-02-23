@@ -12,10 +12,8 @@ void Pause()
 		SDL_Delay(500);
 		while(SDL_PollEvent(&event))
 		{
-		if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) Resumed = true;
-		if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) Quit = true;
+		if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {Resumed = true; SDL_WM_GrabInput( SDL_GRAB_ON ); SDL_ShowCursor(SDL_DISABLE);}
+		if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {State = MENU; Resumed = true;}
 		}
 	}
-	SDL_WM_GrabInput( SDL_GRAB_ON );
-	SDL_ShowCursor(SDL_DISABLE);
 }

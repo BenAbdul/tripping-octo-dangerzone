@@ -6,7 +6,7 @@
 
 extern std::vector <Button> ButtonVector;
 
-extern void CreateButton(int Wx, int Wy, int WID,SDL_Surface *WUnPressed, SDL_Surface *WPressed);
+extern void CreateButton(int Wx, int Wy, int WID,SDL_Surface *WUnPressed, SDL_Surface *WPressed, int LOffset);
 extern int DoButtons();
 extern void ClearButtons();
 #endif

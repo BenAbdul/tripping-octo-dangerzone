@@ -13,12 +13,15 @@
 #include "OpenDebugWindow.h"
 #include "EnemyClass.h"
 #include "ButtonClass.h"
+#include <fstream>
 
 extern SDL_Event event;
 
 extern std::stringstream SpareStream;
+extern std::string HName1,HName2,HName3;
 
 extern std::vector <double> ProjectileVector;
+extern std::vector <int> ICantCode;
 extern std::vector <Enemy> EnemyVector;
 
 extern const int ScreenWidth;
@@ -38,6 +41,8 @@ extern SDL_Rect BottomWall;
 
 extern SDL_Surface *Background;
 extern SDL_Surface *HighscoresBackground;
+extern SDL_Surface *HighscoresNormal;
+extern SDL_Surface *HighscoresMouseover;
 extern SDL_Surface *MenuBackground;
 extern SDL_Surface *Screen;
 extern SDL_Surface *Window;
@@ -45,6 +50,8 @@ extern SDL_Surface *CursorSheet;
 extern SDL_Surface *StartNormal;
 extern SDL_Surface *StartMouseOver;
 extern SDL_Surface *PausedScreen;
+extern SDL_Surface *OptionsNormal;
+extern SDL_Surface *OptionsMouseover;
 extern SDL_Surface *EnemuIndicator;
 extern SDL_Surface *YouDied;
 extern SDL_Surface *YouAreShit;
@@ -70,6 +77,8 @@ extern SDL_Surface *EnemyUpClips;
 extern SDL_Surface *KillsImg;
 
 extern TTF_Font *KarmaFuture;
+extern TTF_Font *Takara;
+extern TTF_Font *TakaraBig;
 extern TTF_Font *EightBitLimit;
 extern TTF_Font *EightBitLimitBig;
 extern TTF_Font *EightBitLimitSmall;
@@ -91,6 +100,9 @@ extern bool ShallIRenderHim;
 extern int CameraX;
 extern int CameraY;
 extern int XChange;
+extern int Score1;
+extern int Score2;
+extern int Score3;
 extern int YChange;
 extern int KillerID;
 extern int Kills;
@@ -100,7 +112,7 @@ extern int Lives;
 extern int Mag, Dur;
 extern int PlayerXVel, PlayerYVel;
 
-extern enum Gamestate {MENU,GAME,HIGHSCORES};
+extern enum Gamestate {MENU,GAME,HIGHSCORES,OPTIONS};
 extern Gamestate State;
 
 SDL_Surface *LoadImage( std::string filename );
