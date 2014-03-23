@@ -4,6 +4,9 @@
 
 void Menu()
 {
+	CreateButton(91,278,1,StartNormal,StartMouseOver,3);
+	CreateButton(91,318,2,HighscoresNormal,HighscoresMouseover,3);
+	CreateButton(91,358,3,OptionsNormal,OptionsMouseover,3);
 	while (Quit == false && State == MENU)
 	{
 		SDL_Delay(10);
@@ -12,18 +15,18 @@ void Menu()
 		switch(Clicked)
 		{
 		case 1:
+			ClearButtons();
 			State = GAME;
 			break;
 		case 2:
+			ClearButtons();
 			State = HIGHSCORES;
 			break; //no defaults
 		case 3:
+			ClearButtons();
 			State = OPTIONS;
 		};
 		SDL_Flip(Screen);
-		CreateButton(91,278,1,StartNormal,StartMouseOver,3);
-		CreateButton(91,318,2,HighscoresNormal,HighscoresMouseover,0);
-		CreateButton(91,358,3,OptionsNormal,OptionsMouseover,0);
 		while(SDL_PollEvent(&event))
 		{
 			if(event.type == SDL_QUIT) Quit = true;

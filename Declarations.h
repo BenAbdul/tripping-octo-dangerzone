@@ -72,6 +72,8 @@ extern SDL_Surface *SmallGrid;
 extern SDL_Surface *SniperFlipped;
 extern SDL_Surface *Message1;
 extern SDL_Surface *Message2;
+extern SDL_Surface *Message3;
+extern SDL_Surface *Message4;
 extern SDL_Surface *EnemyDownClips;
 extern SDL_Surface *EnemyUpClips;
 extern SDL_Surface *KillsImg;

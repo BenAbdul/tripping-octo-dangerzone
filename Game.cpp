@@ -280,7 +280,9 @@ void Game()
 				else Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
 			}
 			else Weapon = rotozoomSurface(Sniper,360 - CalculateProjectileAngle(Character.WorldxPos - Viewport.CameraRect.x ,Character.WorldyPos - Viewport.CameraRect.y ,Mouse.MouseX,Mouse.MouseY),1,0);
-			ApplySurface((Character.WorldxPos - Viewport.CameraRect.x) - 49,(Character.WorldyPos - Viewport.CameraRect.y) - 49,Weapon,Screen);
+			int ExOffSet = (Sniper->w / 2) - Weapon->w / 2;
+			int WhyOffSet = (Sniper->h / 2) - Weapon->h / 2;
+			ApplySurface((Character.WorldxPos - Viewport.CameraRect.x + ExOffSet + Character.CurrentSprite->w/2) - 49,(Character.WorldyPos - Viewport.CameraRect.y + WhyOffSet + Character.CurrentSprite->h/2) - 49,Weapon,Screen);
 			int tni = 0; //int backwards 8^)
 			for (tni = 0; tni <= Lives; tni++) 
 			{

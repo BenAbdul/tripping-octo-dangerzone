@@ -43,4 +43,7 @@ int DoButtons()
 	}
 	return 0;
 }
-void ClearButtons();
+void ClearButtons()
+{
+	ButtonVector.erase(ButtonVector.begin(),ButtonVector.end());
+}
