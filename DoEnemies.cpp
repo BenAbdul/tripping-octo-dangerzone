@@ -251,7 +251,7 @@ void CheckShake()
 	else if (InvincibilityFrames > 110 && InvincibilityFrames < 120) ShallIRenderHim = false;
 	else ShallIRenderHim = true; 
 
-	if (Dur >= 1)
+	if (Dur >= 1 && ScreenShake == true)
 	{
 		Dur--;
 		Viewport.xOffSet = rand () % Mag + ((Mag/2)* -1);

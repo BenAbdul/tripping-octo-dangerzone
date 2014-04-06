@@ -379,6 +379,10 @@ void Game()
 			Message2 = rotozoomSurface(Message1,0,2 * sin(Counter),0);
 			ApplySurface((ScreenWidth - Message2->w)/2,ScreenHeight - 80,Message2,Screen);
 			//Kills = 500;
+			std::ifstream ScoresInput;
+			ScoresInput.open("TOD.DAT");
+			ScoresInput >> Score1 >> Score2 >> Score3 >> HName1 >> HName2 >> HName3;
+			ScoresInput.close();
 			if(Kills > Score3 && ScoresDone == false)
 			{
 				std::vector <int> ScoreVector;
@@ -473,7 +477,7 @@ void Game()
 				ProjectileVector.push_back(0);
 				ProjectileVector.push_back(0);
 				srand(time(NULL));
-				int Spray = (rand () % 8 + 1) - 4;
+				int Spray = (rand () % 4 + 1) - 2;
 				if (xRatio > 0)ProjectileVector.push_back(xRatio + Spray + Character.xVel);
 				else ProjectileVector.push_back(xRatio - Spray + Character.xVel);
 				ProjectileVector.push_back((yRatio * -1)+ Character.yVel);

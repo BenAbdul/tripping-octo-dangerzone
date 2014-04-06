@@ -45,6 +45,7 @@ bool Ded = false;
 bool LazyFlag2 = false;
 bool MouseDown = false;
 bool PlsPlaySound = true;
+bool ScreenShake = true;
 bool LazyDebug = false;
 bool ShallIRenderHim = true;
 
@@ -62,6 +63,7 @@ const int ScreenBBP = 32;
 const int Arena = 6000;
 
 SDL_Colour White = {225,225,225};
+SDL_Colour Other = {225,0,0};
 
 Uint8 *ArrowStates = SDL_GetKeyState(NULL);
 
@@ -152,11 +154,6 @@ void LoadFiles()
 	Sniper = LoadImage("Resources/Images/LeSniper.png");
 	SniperFlipped = LoadImage("Resources/Images/LeSniperFlipped.png");
 	KillsImg = LoadImage("Resources/Images/Kills.png");
-
-	std::ifstream ScoresInput;
-	ScoresInput.open("TOD.DAT");
-	ScoresInput >> Score1 >> Score2 >> Score3 >> HName1 >> HName2 >> HName3;
-	ScoresInput.close();
 }
 
 int Dur, Mag;

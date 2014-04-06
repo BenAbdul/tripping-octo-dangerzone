@@ -30,6 +30,7 @@ extern const int ScreenBBP;
 extern const int Arena;
 
 extern SDL_Colour White;
+extern SDL_Colour Other;
 
 extern Uint8 *ArrowStates;
 
@@ -86,6 +87,7 @@ extern TTF_Font *EightBitLimitBig;
 extern TTF_Font *EightBitLimitSmall;
 
 extern bool Quit;
+extern bool ScreenShake;
 extern bool WasItInit;
 extern bool LDown;
 extern bool RDown;

@@ -7,6 +7,11 @@
 	*/
 void HighScores()
 {
+	std::ifstream ScoresInput;
+	ScoresInput.open("TOD.DAT");
+	ScoresInput >> Score1 >> Score2 >> Score3 >> HName1 >> HName2 >> HName3;
+	ScoresInput.close();
+	
 	Message1 = TTF_RenderText_Solid(Takara,"Hall of Fame",White);
 	SpareStream.str("");
 	SpareStream << HName1 << ": " << Score1;
