@@ -6,7 +6,6 @@
 #include"Game.h"
 #include"Camera.h"
 #include"Cursor.h"
-#include"PlayRandomMusic.h"
 #include"CalculateProjectileAngle.h"
 #include"ReturnPlayerDirection.h"
 #include"Pause.h"
@@ -144,8 +143,8 @@ void Game()
 	bool PieceOfPoo = false;
 	bool ScoresDone = false;
 	int YouDiedProgress = 0;
+	double StartProgress = 0;
 	double YouAreShitProgress = 0;
-	PlayRandomMusic();
 	Mix_Chunk *WickedSick = NULL;
 	Mix_Chunk *Minigun = NULL;
 	Mix_Chunk *Machinegun= NULL;
@@ -350,10 +349,10 @@ void Game()
 			{
 				if (PlsPlaySound == true)
 				{
-					if (Kills < 15) Mix_PlayChannel(-1,Click,0);
-					else if (Kills < 70) Mix_PlayChannel(-1,Pistol,0);
-					else if (Kills < 100) Mix_PlayChannel(-1,Machinegun,0);
-					else if (Kills < 150) Mix_PlayChannel(-1,Minigun,0);
+					if (Kills < 25) Mix_PlayChannel(-1,Click,0);
+					else if (Kills < 100) Mix_PlayChannel(-1,Pistol,0);
+					else if (Kills < 150) Mix_PlayChannel(-1,Machinegun,0);
+					else if (Kills < 200) Mix_PlayChannel(-1,Minigun,0);
 					else {Mix_PlayChannel(-1,WickedSick,0); Mix_HaltMusic();}
 				}
 
@@ -461,6 +460,33 @@ void Game()
 			ApplySurface(0,175,Message2,Screen);
 		}
 		Viewport.MoveCameraTo(Character.WorldxPos - (ScreenWidth - Character.CurrentSprite->w)/2 , Character.WorldyPos - (ScreenHeight - Character.CurrentSprite->h)/2);
+		
+		if (StartProgress <= 90)
+		{
+			
+			double Sign = sin(StartProgress * PI/180);
+			double StartH = 0; 
+			double StartO = 0;
+
+			if (StartProgress > 10) 
+			{
+				double Sign2 = sin((StartProgress - 10) * PI/180);
+				StartH = Sign2 * (ScreenWidth - 91) * 1.2;
+			}
+
+			if (StartProgress > 20)
+			{
+				double Sign3 = sin((StartProgress - 20) * PI/180);
+				StartO = Sign3 * (ScreenWidth - 91) * 1.5;
+			}
+
+			ApplySurface(0, Sign * ScreenHeight,MenuBackground,Screen);
+			ApplySurface(91 + Sign * (ScreenWidth - 91), 278, StartMouseOver,Screen);
+			ApplySurface(91 + StartH, 318, HighscoresNormal,Screen);
+			ApplySurface(91 + StartO, 358, OptionsNormal,Screen);
+			StartProgress+=0.5;
+		}
+		
 		SDL_Flip(Screen);
 		while(SDL_PollEvent(&event))
 		{

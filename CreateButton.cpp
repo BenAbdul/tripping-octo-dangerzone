@@ -22,6 +22,7 @@ int DoButtons()
 {
 	bool MouseOver = false;
 	bool Click = false;
+	SDL_PumpEvents();
 	if (ButtonVector.size() != 0)
 	{
 		SDL_PumpEvents();

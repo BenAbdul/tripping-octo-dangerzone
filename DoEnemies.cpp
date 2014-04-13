@@ -3,7 +3,7 @@
 #include"Game.h"
 
 void CheckShake();
-int InvincibilityFrames = 0;
+int InvincibilityFrames = -100;
 
 
 

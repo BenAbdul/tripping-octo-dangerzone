@@ -1,9 +1,13 @@
 #include"Declarations.h"
 #include"CreateButton.h"
+#include"PlayRandomMusic.h"
 #include"Menu.h"
 
 void Menu()
 {
+	PlayRandomMusic();
+	SDL_WM_GrabInput(SDL_GRAB_OFF);
+	SDL_ShowCursor(SDL_ENABLE);
 	CreateButton(91,278,1,StartNormal,StartMouseOver,3);
 	CreateButton(91,318,2,HighscoresNormal,HighscoresMouseover,3);
 	CreateButton(91,358,3,OptionsNormal,OptionsMouseover,3);

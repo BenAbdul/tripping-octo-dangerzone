@@ -22,7 +22,6 @@ int main (int argc, char* argv [])
 	{
 		if (Restart == true)
 		{
-			State = GAME;
 			Ded = false;
 			Lives = 4;
 			EnemyVector.erase(EnemyVector.begin(),EnemyVector.end());
@@ -54,5 +53,43 @@ int main (int argc, char* argv [])
 			break;
 		}
 	}
+
+	SDL_FreeSurface(Screen);
+	SDL_FreeSurface(Background);
+	SDL_FreeSurface(HighscoresBackground);
+	SDL_FreeSurface(StartNormal);
+	SDL_FreeSurface(StartMouseOver);
+	SDL_FreeSurface(MenuBackground);
+	SDL_FreeSurface(CursorSheet);
+	SDL_FreeSurface(YouDied);
+	SDL_FreeSurface(YouAreShit);
+	SDL_FreeSurface(Message1);
+	SDL_FreeSurface(LivesIcon);
+	SDL_FreeSurface(Message2);
+	SDL_FreeSurface(Message3);
+	SDL_FreeSurface(Message4);
+	SDL_FreeSurface(PausedScreen);
+	SDL_FreeSurface(Background2);
+	SDL_FreeSurface(HighscoresNormal);
+	SDL_FreeSurface(HighscoresMouseover);
+	SDL_FreeSurface(OptionsNormal);
+	SDL_FreeSurface(OptionsMouseover);
+	SDL_FreeSurface(Window);
+	SDL_FreeSurface(U1);
+	SDL_FreeSurface(SmallGrid);
+	SDL_FreeSurface(BigGrid);
+	SDL_FreeSurface(FrontDed);
+	SDL_FreeSurface(D1);
+	SDL_FreeSurface(L1);
+	SDL_FreeSurface(R1);
+	SDL_FreeSurface(Projectile);
+	SDL_FreeSurface(HUD);
+	SDL_FreeSurface(KillsImg);
+	SDL_FreeSurface(Sniper);
+	SDL_FreeSurface(SniperFlipped);
+	SDL_FreeSurface(EnemuIndicator);
+	SDL_FreeSurface(EnemyDownClips);
+	SDL_FreeSurface(EnemyUpClips);
+
 	return 0;
 }
